@@ -15,6 +15,8 @@ const useUserStore = create(
             isLoading: false,
             error: null,
             teller: null,
+            success: false,
+            
             setUser: (user) => set({ user }),
 
             login: async (credentials) => {
@@ -97,6 +99,23 @@ const useUserStore = create(
                     });
                 }
             },
+
+
+            resetPassword: async (username, newPassword) => {
+                set({ isLoading: true, error: null, success: false });
+                
+                try {
+                  const response = await api.post('/users/reset-password', { username, newPassword });
+                  set({ success: true, isLoading: false });
+                  return response.data;
+                } catch (error) {
+                  set({ 
+                    error: error.response?.data?.message || 'Failed to reset password', 
+                    isLoading: false 
+                  });
+                  throw error;
+                }
+              },
 
 
             getUserDetails: async (userId) => {

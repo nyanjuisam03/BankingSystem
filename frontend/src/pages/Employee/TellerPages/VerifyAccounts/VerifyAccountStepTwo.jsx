@@ -48,23 +48,24 @@ function VerifyAccountStepTwo({ onBack }) {
 
   const handleApprove = async () => {
     try {
-      if (!tellerDetails || !tellerDetails.id) {
-        throw new Error('Teller ID not found. Please ensure you are logged in as a teller.');
-      }
+        // Ensure `tellerDetails` is optional
+        const tellerId = tellerDetails?.id || null;
 
-      // Use the teller.id from the fetched teller details
-      await updateAccount(account.id, 'approved', tellerDetails.id);
-      console.log(account.id)
-      // Refresh account details after update
-      await fetchAccountDetail(account.id);
-      
-      // Success feedback
-      alert('Account successfully approved!');
+        // Call the `updateAccount` function without forcing `tellerId`
+        await updateAccount(account.id, 'approved', tellerId);
+        console.log(`Account ${account.id} successfully approved`);
+
+        // Refresh account details after update
+        await fetchAccountDetail(account.id);
+
+        // Success feedback
+        alert('Account successfully approved!');
     } catch (error) {
-      setError(error.response?.data?.message || 'Failed to approve the account');
-      console.error(error);
+        // Provide error feedback to the user
+        setError(error.response?.data?.message || 'Failed to approve the account');
+        console.error('Error approving account:', error);
     }
-  };
+};
 
   const handleReject = async () => {
     try {

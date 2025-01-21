@@ -140,3 +140,70 @@ exports.getTeller=(req,res)=>{
         });
     });
 }
+
+exports.resetPassword = async (req, res) => {
+    const { username, newPassword } = req.body;
+
+    try {
+        // Validate the new password
+        if (!newPassword || newPassword.length < 8) {
+            return res.status(400).json({
+                message: 'New password must be at least 8 characters long'
+            });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Find user by username and update password
+        const updatePasswordQuery = 'UPDATE users SET password = ? WHERE username = ?';
+        
+        await new Promise((resolve, reject) => {
+            db.query(updatePasswordQuery, [hashedPassword, username], (err, result) => {
+                if (err) reject(err);
+                if (result.affectedRows === 0) {
+                    reject(new Error('User not found'));
+                }
+                resolve();
+            });
+        });
+
+        // Get user ID for logging
+        const getUserIdQuery = 'SELECT id FROM users WHERE username = ?';
+        const userId = await new Promise((resolve, reject) => {
+            db.query(getUserIdQuery, [username], (err, results) => {
+                if (err) reject(err);
+                if (results.length === 0) reject(new Error('User not found'));
+                resolve(results[0].id);
+            });
+        });
+
+        // Log the password reset action
+        const logResetQuery = 'INSERT INTO password_reset_logs (user_id, reset_date) VALUES (?, NOW())';
+        
+        await new Promise((resolve, reject) => {
+            db.query(logResetQuery, [userId], (err) => {
+                if (err) reject(err);
+                resolve();
+            });
+        });
+
+        res.status(200).json({
+            message: 'Password reset successful'
+        });
+
+    } catch (error) {
+        console.error('Password reset error:', error);
+        
+        if (error.message === 'User not found') {
+            return res.status(404).json({
+                message: 'Username not found'
+            });
+        }
+
+        res.status(500).json({
+            message: 'Error resetting password',
+            error: error.message
+        });
+    }
+};
