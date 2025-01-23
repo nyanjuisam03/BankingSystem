@@ -169,9 +169,14 @@ exports.createTransaction = (req, res) => {
 
 exports.getAllTransactions = (req, res) => {
     const query = `
-        SELECT t.*, a.balance as current_balance 
+        SELECT 
+            t.*, 
+            a.account_number, 
+            u.username, 
+            a.balance AS current_balance
         FROM transactions t
         JOIN accounts a ON t.account_id = a.id
+        JOIN users u ON a.user_id = u.id
         ORDER BY t.date DESC
     `;
 

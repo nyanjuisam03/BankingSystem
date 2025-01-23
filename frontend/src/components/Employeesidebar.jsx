@@ -122,7 +122,7 @@ function Employeesidebar({ userRole }) {
                 icon: <HiOutlineUserGroup size={20} />,
                 submenu: [
                     {
-                        title: 'Verify Transactions',
+                        title: 'Check Users Transactions',
                         path: '/employee/teller/virtual-transactions',
                     },
                 ],

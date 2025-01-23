@@ -76,7 +76,7 @@ exports.openAccount = async (req, res) => {
                     const createAccountQuery = `
                         INSERT INTO accounts 
                         (user_id, account_type, balance, status, intial_deposit, account_number, created_at) 
-                        VALUES (?, ?, ?, 'active', ?, ?, NOW())
+                        VALUES (?, ?, ?, 'pending', ?, ?, NOW())
                     `;
 
                     db.query(createAccountQuery, 
@@ -98,7 +98,7 @@ exports.openAccount = async (req, res) => {
                                     account_type: accountTypeId,
                                     account_number: newAccountNumber,
                                     balance: intial_deposit,
-                                    status: 'active'
+                                    status: 'pending'
                                 }
                             });
                         }

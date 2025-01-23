@@ -6,5 +6,6 @@ router.put('/users/:id', userController.updateUser);
 router.get('/users/:id', userController.getUserDetails);
 router.get('/users/teller/:id', userController.getTeller)
 router.post('/reset-password', userController.resetPassword)
+router.get('/search-username' , userController.searchByUserName)
 
 module.exports = router;

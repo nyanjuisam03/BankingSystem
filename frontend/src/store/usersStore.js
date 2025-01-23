@@ -133,6 +133,27 @@ const useUserStore = create(
                 }
             },
 
+            searchUsers: async (username) => {
+                set({ isLoading: true });
+                try {
+                    console.log('Searching for users with username:', username);
+                    const response = await api.get(`/users/search-username?username=${username}`);
+                    if (response.data && response.data.data) {
+                        return response.data.data; // Return the users data
+                    } else {
+                        set({ error: 'No users found', isLoading: false });
+                        return [];
+                    }
+                } catch (error) {
+                    console.error('Error in searchUsers:', error.response?.data?.message || error.message);
+                    set({ 
+                        error: error.response?.data?.message || 'Failed to search users',
+                        isLoading: false 
+                    });
+                    throw error;
+                }
+            },
+
             logout: async () => {
                 try {
                     await api.post('/auth/logout');

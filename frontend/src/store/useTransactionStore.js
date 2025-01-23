@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
+
 // Create axios instance with base URL
 const api = axios.create({
     baseURL: 'http://localhost:2000/api',
 });
 
 const useTransactionStore = create((set, get) => ({
-    transactions: {},  // Object to store transactions by account ID
+    transactions: [],  // Object to store transactions by account ID
     isLoading: false,
     error: null,
 
@@ -73,6 +74,7 @@ const useTransactionStore = create((set, get) => ({
         return state.transactions[accountId] || [];
     },
 
+
     // Create a new transaction
     createTransaction: async (transactionData) => {
         set({ isLoading: true, error: null });
@@ -115,6 +117,20 @@ const useTransactionStore = create((set, get) => ({
     },
 
    
+
+    fetchAllTransactions: async () => {
+        set({ isLoading: true, error: null });
+
+        try {
+            const response = await api.get('/transactions/all-transactions');
+            set({ transactions: response.data.data, isLoading: false });
+        } catch (error) {
+            set({
+                error: error.response?.data?.message || "Failed to fetch transactions",
+                isLoading: false,
+            });
+        }
+    },
     // Clear errors
     clearError: () => set({ error: null }),
 

@@ -207,3 +207,40 @@ exports.resetPassword = async (req, res) => {
         });
     }
 };
+
+exports.searchByUserName = async (req, res) => {
+    const { username } = req.query;
+
+    // Check if the username exists in the request
+    if (!username) {
+        return res.status(400).json({
+            message: 'Username query parameter is required'
+        });
+    }
+
+    // Query to search users in the database
+    const query = 'SELECT id, username, email FROM users WHERE username LIKE ?';
+    const searchPattern = `%${username}%`; // Use a wildcard pattern for partial matches
+
+    db.query(query, [searchPattern], (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Error searching for users',
+                error: err
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({
+                message: 'No users found',
+                users: [] // Return an empty array to maintain consistent structure
+            });
+        }
+
+        // Return the matching users
+        res.status(200).json({
+            message: 'Users fetched successfully',
+            data: results // Use `data` for consistency
+        });
+    });
+}

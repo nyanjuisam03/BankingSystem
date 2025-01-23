@@ -10,7 +10,9 @@ const api = axios.create({
 });
 
 const useTicketStore = create((set, get) => ({
-    tickets: {},  // Object to store tickets by user ID
+    tickets: [], 
+   
+  allTickets:[],
     isLoading: false,
     error: null,
 
@@ -68,6 +70,56 @@ const useTicketStore = create((set, get) => ({
             isLoading: state.isLoading,
             error: state.error
         });
+    },
+
+    fetchTickets: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await api.get('/booking/all-bookingtickets'); // Call the endpoint
+            set({
+                allTickets: response.data.data, // Set tickets from the response
+                isLoading: false,
+            });
+            console.log('Tickets fetched successfully:', response.data.data);
+        } catch (error) {
+            console.error('Error fetching tickets:', error);
+            set({
+                error: error.response?.data?.message || 'Failed to fetch tickets',
+                isLoading: false,
+            });
+        }
+    },
+
+
+    completeTicket: async (ticketId) => {
+        set({ isLoading: true, error: null })
+        try {
+          const response = await api.patch('/booking/complete-ticket', { ticketId }) // PATCH request with ticketId in the body
+          if (response.status === 200) {
+            const updatedTickets = get().tickets.map((ticket) =>
+              ticket.ticket_id === ticketId ? { ...ticket, status: 'COMPLETED' } : ticket
+            )
+            set({ tickets: updatedTickets, isLoading: false })
+          }
+        } catch (error) {
+          set({ error: error.message, isLoading: false })
+        }
+      },
+    
+      // Update ticket status to "confirmed"
+      confirmTicket: async (ticketId) => {
+        set({ isLoading: true, error: null })
+        try {
+          const response = await api.patch('/booking/confirm-ticket', { ticketId }) // PATCH request with ticketId in the body
+          if (response.status === 200) {
+            const updatedTickets = get().tickets.map((ticket) =>
+              ticket.ticket_id === ticketId ? { ...ticket, status: 'CONFIRMED' } : ticket
+            )
+            set({ tickets: updatedTickets, isLoading: false })
+          }
+        } catch (error) {
+          set({ error: error.message, isLoading: false })
+        }
     },
 
     // Get tickets for a specific user

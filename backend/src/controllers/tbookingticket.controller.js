@@ -23,6 +23,31 @@ exports.getBookingTicket=(req,res)=>{
     });
 };
 
+exports.getAllBookingTickets = (req, res) => {
+  const query = `
+  SELECT 
+  * 
+FROM tickets
+ORDER BY created_at DESC
+  `;
+
+  db.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({
+              message: 'Error retrieving tickets',
+              error: err
+          });
+      }
+
+      res.status(200).json({
+          message: 'All tickets retrieved successfully',
+          data: results
+      });
+  });
+};
+
+
+
 exports.createBookingTicket=(req,res)=>{
     const { userId, ticketType, appointmentDate, appointmentTime, description } = req.body;
 
@@ -67,6 +92,40 @@ exports.createBookingTicket=(req,res)=>{
     });
 }
 
+exports.completeTicket = (req, res) => {
+  const { ticketId } = req.body; // Expect ticketId to be sent in the request body
+
+  if (!ticketId) {
+      return res.status(400).json({ message: 'Ticket ID is required' });
+  }
+
+  const query = `
+      UPDATE tickets 
+      SET status = 'COMPLETED' 
+      WHERE ticket_id = ?
+  `;
+
+  db.query(query, [ticketId], (err, results) => {
+      if (err) {
+          return res.status(500).json({
+              message: 'Error updating ticket to completed',
+              error: err,
+          });
+      }
+
+      if (results.affectedRows === 0) {
+          return res.status(404).json({
+              message: 'Ticket not found',
+          });
+      }
+
+      res.status(200).json({
+          message: 'Ticket marked as completed successfully',
+      });
+  });
+};
+
+
 exports.cancelBooking=(req,res)=>{
     const { ticketId } = req.body; // Expect ticketId to be sent in the request body
 
@@ -99,3 +158,36 @@ exports.cancelBooking=(req,res)=>{
     });
   });
 }
+
+exports.confirmTicket = (req, res) => {
+  const { ticketId } = req.body; // Expect ticketId to be sent in the request body
+
+  if (!ticketId) {
+      return res.status(400).json({ message: 'Ticket ID is required' });
+  }
+
+  const query = `
+      UPDATE tickets 
+      SET status = 'CONFIRMED' 
+      WHERE ticket_id = ?
+  `;
+
+  db.query(query, [ticketId], (err, results) => {
+      if (err) {
+          return res.status(500).json({
+              message: 'Error updating ticket to confirmed',
+              error: err,
+          });
+      }
+
+      if (results.affectedRows === 0) {
+          return res.status(404).json({
+              message: 'Ticket not found',
+          });
+      }
+
+      res.status(200).json({
+          message: 'Ticket confirmed successfully',
+      });
+  });
+};
