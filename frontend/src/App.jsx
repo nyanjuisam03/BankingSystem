@@ -26,6 +26,9 @@ import VerifyAccounts from './pages/Employee/TellerPages/VerifyAccounts'
 import CardCraetion from './pages/Employee/TellerPages/CardCraetion'
 import AccountCreation from './pages/Employee/TellerPages/AccountCreation'
 import PasswordReset from "./pages/Employee/TellerPages/PasswordReset"
+import LoanDashboard from './pages/Employee/LoanOfficerPages/LoanDashboard'
+import LoanApplications from './pages/Employee/LoanOfficerPages/LoanApplications'
+import LoanApproval from './pages/Employee/LoanOfficerPages/LoanApproval'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -57,6 +60,7 @@ function App() {
        </Route>
 
        <Route path='/employee' element={<EmployeeHomepage/>}>
+
         <Route path="admin" >
         <Route path="dashboard" element={<Admindashboard />} />
        <Route path="user-management" element={<UserManagement />} />
@@ -66,7 +70,6 @@ function App() {
         </Route>
 
         <Route path='teller'>
-
          <Route path='teller-dashboard' element={<TellerDashboard/>}/>
          <Route path='virtual-transactions' element={<VirtualTransaction/>}/>
          <Route path='account-services' element={<AccountService/>}/>
@@ -75,7 +78,12 @@ function App() {
          <Route path='card-creation' element={<CardCraetion/>}/>
          <Route path='account-creation' element={<AccountCreation/>}/>
          <Route path='password-reset' element={<PasswordReset/>}/>
+        </Route>
 
+        <Route path='loan_officer'>
+        <Route path='dashboard' element={<LoanDashboard/>}/>
+        <Route path='approval' element={<LoanApproval/>}/>
+        <Route path='applications' element={<LoanApplications/>}/>
         </Route>
 
        </Route>

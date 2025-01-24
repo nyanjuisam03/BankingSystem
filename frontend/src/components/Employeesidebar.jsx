@@ -135,23 +135,15 @@ function Employeesidebar({ userRole }) {
             submenu: [
                 {
                     title: 'Dashboard',
-                    path: '/employee/loan/dashboard',
+                    path: '/employee/loan_officer/dashboard',
                 },
                 {
                     title: 'Loan Applications',
-                    path: '/employee/loan/applications',
-                },
-                {
-                    title: 'Credit Assessment',
-                    path: '/employee/loan/assessment',
-                },
-                {
-                    title: 'Document Verification',
-                    path: '/employee/loan/verification',
+                    path: '/employee/loan_officer/applications',
                 },
                 {
                     title: 'Loan Approval',
-                    path: '/employee/loan/approval',
+                    path: '/employee/loan_officer/approval',
                 },
             ],
         },

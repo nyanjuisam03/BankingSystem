@@ -31,6 +31,8 @@ function Login() {
       navigate('/customer');
       case 'teller':
         navigate('/employee/teller');
+        case 'loan_officer':
+          navigate('/employee/loan_officer')
       break;
     default:
       navigate('/customer'); // Your default route
