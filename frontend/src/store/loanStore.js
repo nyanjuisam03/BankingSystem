@@ -93,6 +93,83 @@ const useLoanStore = create((set, get) => ({
     }
   },
 
+  setCurrentLoan: (loan) => set({ currentLoan: loan }),
+
+
+  updateLoanStatus: async (loanId, statusData) => {
+    const user = useUserStore.getState().user;
+  
+    if (!user?.id) {
+      set({ error: 'User is not logged in or user ID is missing', loading: false });
+      throw new Error('User is not logged in or user ID is missing');
+    }
+  
+    set({ loading: true, error: null, successMessage: null });
+  
+    try {
+      // Validate status
+      const validStatuses = ['draft', 'submitted', 'under_review', 'approved', 'rejected'];
+      if (!validStatuses.includes(statusData.status)) {
+        throw new Error('Invalid status');
+      }
+  
+      // Add user_id to headers
+      const config = {
+        headers: {
+          'user-id': user.id,
+        },
+      };
+  
+      const response = await api.patch(
+        `/loans/loans/${loanId}/status`,
+        statusData,
+        config
+      );
+  
+      // Update the loan status in the local state
+      set((state) => ({
+        loans: state.loans.map((loan) =>
+          loan.id === loanId
+            ? { ...loan, status: statusData.status }
+            : loan
+        ),
+        currentLoan:
+          state.currentLoan?.id === loanId
+            ? { ...state.currentLoan, status: statusData.status }
+            : state.currentLoan,
+        loading: false,
+        successMessage: 'Loan status updated successfully',
+        error: null,
+      }));
+  
+      return response.data;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || err.message || 'Failed to update loan status';
+      set({
+        error: errorMessage,
+        loading: false,
+        successMessage: null,
+      });
+      throw new Error(errorMessage);
+    }
+  },
+
+
+  createCustomerLoans: async(loanData)=>{
+    set({ isLoading: true, error: null });
+    try {
+        const response = await api.post('/loans/loan-officer/create-loan', loanData);
+        set(state => ({
+            loans: [...state.loans, response.data.details],
+            isLoading: false
+        }));
+        return response.data;
+    } catch (error) {
+        set({ error: error.response?.data?.message || 'Error creating loan', isLoading: false });
+        throw error;
+    }
+  },
   // Fetch user loans
   fetchUserLoans: async () => {
     const user = useUserStore.getState().user;
@@ -161,6 +238,26 @@ const useLoanStore = create((set, get) => ({
         loading: false 
       });
       throw new Error(errorMessage);
+    }
+  },
+
+
+  fetchAllLoans: async () => {
+    try {
+      set({ loading: true, error: null });
+      const response = await api.get('/loans/all-loans');
+      
+   
+      if (Array.isArray(response.data.loans)) {
+        set({ loans: response.data.loans, loading: false });
+      } else {
+        set({ error: 'Loans data is not an array', loading: false });
+      }
+    } catch (err) {
+      set({ 
+        error: err.response?.data?.message || 'Failed to fetch loans', 
+        loading: false 
+      });
     }
   },
 

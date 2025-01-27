@@ -1,6 +1,7 @@
 const db = require("../config/database");
 const { v4: uuidv4 } = require('uuid');
 
+
 exports.createLoan = (req, res) => {
     const {
         user_id, // Moved from headers to body
@@ -113,10 +114,132 @@ exports.createLoan = (req, res) => {
     }
 };
 
+exports.createCustomerLoan = (req, res) => {
+    const {
+        user_id,
+        loan_type,
+        amount,
+        purpose,
+        term_months,
+        monthly_income,
+        employment_status,
+        employer_name,
+        job_title,
+        years_employed,
+        credit_score,
+        existing_loans_monthly_payment
+    } = req.body;
+
+    // Validate required fields
+    if (!user_id || !loan_type || !amount || !purpose || !term_months) {
+        return res.status(400).json({
+            message: 'Required fields are missing'
+        });
+    }
+
+    // Validate loan type
+    const validLoanTypes = ['personal', 'home', 'auto', 'business'];
+    if (!validLoanTypes.includes(loan_type)) {
+        return res.status(400).json({
+            message: 'Invalid loan type'
+        });
+    }
+
+    // Check if user exists and has customer role
+    const checkCustomerQuery = `
+        SELECT u.id 
+        FROM users u
+        JOIN user_roles ur ON u.id = ur.user_id
+        WHERE u.id = ? AND ur.role_id = 5
+    `;
+
+    db.query(checkCustomerQuery, [user_id], (checkErr, customerResults) => {
+        if (checkErr) {
+            return res.status(500).json({
+                message: 'Error checking customer',
+                error: checkErr.message
+            });
+        }
+
+        if (!customerResults.length) {
+            return res.status(400).json({
+                message: 'Customer not found or invalid customer role'
+            });
+        }
+
+        const loanId = uuidv4();
+
+        // Create loan application based on your actual table structure
+        const createLoanQuery = `
+            INSERT INTO loan_applications (
+                id, 
+                user_id, 
+                loan_type, 
+                amount, 
+                purpose, 
+                term_months, 
+                monthly_income,
+                employment_status,
+                employer_name,
+                job_title,
+                years_employed,
+                credit_score,
+                existing_loans_monthly_payment,
+                status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft')
+        `;
+
+        const createLoanValues = [
+            loanId,
+            user_id,
+            loan_type,
+            amount,
+            purpose,
+            term_months,
+            monthly_income,
+            employment_status,
+            employer_name,
+            job_title,
+            years_employed,
+            credit_score,
+            existing_loans_monthly_payment
+        ];
+
+        db.query(createLoanQuery, createLoanValues, (createErr, result) => {
+            if (createErr) {
+                return res.status(500).json({
+                    message: 'Error creating loan application',
+                    error: createErr.message
+                });
+            }
+
+            res.status(201).json({
+                message: 'Loan application created successfully',
+                loanId: loanId,
+                details: {
+                    id: loanId,
+                    user_id,
+                    loan_type,
+                    amount,
+                    status: 'draft'
+                }
+            });
+        });
+    });
+};
+
+
 exports.updateLoanStatus = (req, res) => {
     const { id } = req.params;
     const { status, notes } = req.body;
     const user_id = req.headers['user-id'];
+
+    // Validate the user_id
+    if (!user_id) {
+        return res.status(400).json({
+            message: 'User ID is required in the headers'
+        });
+    }
 
     // Validate status
     const validStatuses = ['draft', 'submitted', 'under_review', 'approved', 'rejected'];
@@ -165,6 +288,7 @@ exports.updateLoanStatus = (req, res) => {
         });
     });
 };
+
 
 exports.getLoanDetails = (req, res) => {
     const { id } = req.params;

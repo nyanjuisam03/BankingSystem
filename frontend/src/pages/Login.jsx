@@ -25,6 +25,7 @@ function Login() {
    resolver: zodResolver(loginSchema)
  })
 
+
  const handleNavigation = (role) => {
   switch (role) {
     case 'customer':
@@ -33,6 +34,8 @@ function Login() {
         navigate('/employee/teller');
         case 'loan_officer':
           navigate('/employee/loan_officer')
+          case 'admin':
+            navigate('/employee/admin')
       break;
     default:
       navigate('/customer'); // Your default route

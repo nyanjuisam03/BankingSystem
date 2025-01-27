@@ -5,6 +5,7 @@ const upload=require('../middleware/multer.middleware');
 const { route } = require('./transaction.routes');
 
 router.post('/loans/create-loan',loanController.createLoan)
+router.post('/loan-officer/create-loan',loanController.createCustomerLoan)
 router.patch('/loans/:id/status', loanController.updateLoanStatus);
 router.get('/loans/:id', loanController.getLoanDetails);
 router.get('/loans', loanController.getUserLoans);

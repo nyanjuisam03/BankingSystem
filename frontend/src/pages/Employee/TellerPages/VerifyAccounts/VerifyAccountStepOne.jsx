@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import accountStore from '../../../../store/accountStore';
 import useUserStore from '../../../../store/usersStore';
 
+
 function VerifyAccountStepOne({ onNext }) {
 
 const { accounts, isLoading, error, fetchAllAccount } = accountStore();
