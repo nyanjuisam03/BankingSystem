@@ -54,24 +54,21 @@ function Employeesidebar({ userRole }) {
             submenu: [
                 {
                     title: 'Dashboard',
-                    path: '/employee/manager/dashboard',
+                    path: '/employee/bank-manager/manager-dashboard',
                 },
                 {
                     title: 'Employee Management',
-                    path: '/employee/manager/employees',
+                    path: '/employee/bank-manager/employees',
                 },
                 {
                     title: 'Branch Operations',
-                    path: '/employee/manager/operations',
+                    path: '/employee/bank-manager/operations',
                 },
                 {
                     title: 'Performance Monitoring',
-                    path: '/employee/manager/performance',
+                    path: '/employee/bank-manager/performance',
                 },
-                {
-                    title: 'Policy Administration',
-                    path: '/employee/manager/policies',
-                },
+                
             ],
         },
         teller: {

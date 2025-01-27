@@ -29,6 +29,10 @@ import PasswordReset from "./pages/Employee/TellerPages/PasswordReset"
 import LoanDashboard from './pages/Employee/LoanOfficerPages/LoanDashboard'
 import LoanApplications from './pages/Employee/LoanOfficerPages/LoanApplications'
 import LoanApproval from './pages/Employee/LoanOfficerPages/LoanApproval'
+import ManagerDashboard from './pages/Employee/BankManagerPages/ManagerDashboard'
+import EmployeeManagement from './pages/Employee/BankManagerPages/EmployeeManagement'
+import PerformanceMonitorin from './pages/Employee/BankManagerPages/PerformanceMonitorin'
+import BranchOperation from './pages/Employee/BankManagerPages/BranchOperation'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -85,6 +89,15 @@ function App() {
         <Route path='approval' element={<LoanApproval/>}/>
         <Route path='applications' element={<LoanApplications/>}/>
         </Route>
+
+
+      <Route path='bank-manager'>
+        <Route path='manager-dashboard' element={<ManagerDashboard/>}/>
+         <Route path='employees' element={<EmployeeManagement/>}/>
+         <Route path='performance' element={<PerformanceMonitorin/>}/>
+         <Route path='operations' element={<BranchOperation/>}/>
+      </Route>
+
 
        </Route>
 

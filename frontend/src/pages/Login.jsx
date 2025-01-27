@@ -36,6 +36,8 @@ function Login() {
           navigate('/employee/loan_officer')
           case 'admin':
             navigate('/employee/admin')
+            case 'bank_manager':
+              navigate('/employee/bank-manager')
       break;
     default:
       navigate('/customer'); // Your default route
