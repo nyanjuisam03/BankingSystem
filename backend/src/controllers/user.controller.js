@@ -70,6 +70,124 @@ exports.updateUser = async (req, res) => {
     }
 };
 
+exports.getAllEmployees = async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                u.*,
+                ur.role_id,
+                ur.assigned_at,
+                r.name as role_name,
+                r.description as role_description
+            FROM users u
+            INNER JOIN user_roles ur ON u.id = ur.user_id
+            INNER JOIN roles r ON ur.role_id = r.id
+            WHERE ur.role_id BETWEEN 1 AND 4
+            ORDER BY u.id
+        `;
+
+        db.query(query, (err, results) => {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error fetching employees',
+                    error: err
+                });
+            }
+
+            res.status(200).json({
+                message: 'Employees fetched successfully',
+                data: results,
+                count: results.length
+            });
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error fetching employees',
+            error: error.message
+        });
+    }
+};
+
+exports.getEmployeesByRole = async (req, res) => {
+    const roleId = req.params.roleId;
+
+    try {
+        if (roleId < 1 || roleId > 4) {
+            return res.status(400).json({
+                message: 'Invalid role ID. Must be between 1 and 4'
+            });
+        }
+
+        const query = `
+            SELECT u.*, ur.role_id
+            FROM users u
+            INNER JOIN user_roles ur ON u.id = ur.user_id
+            WHERE ur.role_id = ?
+            ORDER BY u.id
+        `;
+
+        db.query(query, [roleId], (err, results) => {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error fetching employees by role',
+                    error: err
+                });
+            }
+
+            res.status(200).json({
+                message: 'Employees fetched successfully',
+                data: results,
+                count: results.length
+            });
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error fetching employees by role',
+            error: error.message
+        });
+    }
+};
+
+exports.getEmployeeById = async (req, res) => {
+    const employeeId = req.params.id;
+
+    try {
+        const query = `
+            SELECT u.*, ur.role_id
+            FROM users u
+            INNER JOIN user_roles ur ON u.id = ur.user_id
+            WHERE u.id = ? AND ur.role_id BETWEEN 1 AND 4
+        `;
+
+        db.query(query, [employeeId], (err, results) => {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error fetching employee',
+                    error: err
+                });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({
+                    message: 'Employee not found'
+                });
+            }
+
+            res.status(200).json({
+                message: 'Employee fetched successfully',
+                data: results[0]
+            });
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error fetching employee',
+            error: error.message
+        });
+    }
+};
+
+
+
 exports.getUserDetails = async (req, res) => {
     const userId = req.params.id;
     
