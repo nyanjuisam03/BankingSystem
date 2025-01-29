@@ -10,5 +10,6 @@ router.get('/search-username' , userController.searchByUserName)
 router.get('/employees', userController.getAllEmployees)
 router.get('/employees/role/:roleId',userController.getEmployeesByRole)
 router.get('/employees/:id',userController.getEmployeeById)
+router.put('/employees/:id/role' ,userController.updateEmployeeRole)
 
 module.exports = router;

@@ -186,8 +186,6 @@ exports.getEmployeeById = async (req, res) => {
     }
 };
 
-
-
 exports.getUserDetails = async (req, res) => {
     const userId = req.params.id;
     
@@ -362,3 +360,64 @@ exports.searchByUserName = async (req, res) => {
         });
     });
 }
+
+
+exports.updateEmployeeRole = async (req, res) => {
+    const employeeId = req.params.id;
+    const { roleId } = req.body;
+    
+    try {
+        let updateQuery = 'UPDATE user_roles SET ';
+        const values = [];
+        const updates = [];
+
+        if (roleId) {
+            updates.push('role_id = ?');
+            values.push(roleId);
+        }
+
+        // if (startDate) {
+        //     updates.push('start_date = ?');
+        //     values.push(startDate);
+        // }
+
+        // if (updatedBy) {
+        //     updates.push('updated_by = ?');
+        //     values.push(updatedBy);
+        // }
+
+        // // Add update timestamp
+        // updates.push('updated_at = CURRENT_TIMESTAMP');
+
+        if (updates.length === 0) {
+            return res.status(400).json({ message: 'No fields to update' });
+        }
+
+        updateQuery += updates.join(', ');
+        updateQuery += ' WHERE user_id = ?';
+        values.push(employeeId);
+
+        db.query(updateQuery, values, (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error updating employee role',
+                    error: err
+                });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: 'Employee not found' });
+            }
+
+            res.status(200).json({
+                message: 'Employee role updated successfully',
+                employeeId
+            });
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error updating employee role',
+            error: error.message
+        });
+    }
+};

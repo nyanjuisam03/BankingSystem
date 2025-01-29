@@ -33,6 +33,8 @@ import ManagerDashboard from './pages/Employee/BankManagerPages/ManagerDashboard
 import EmployeeManagement from './pages/Employee/BankManagerPages/EmployeeManagement'
 import PerformanceMonitorin from './pages/Employee/BankManagerPages/PerformanceMonitorin'
 import BranchOperation from './pages/Employee/BankManagerPages/BranchOperation'
+import ChangeRoles from './pages/Employee/BankManagerPages/ChangeRoles'
+import RegisterNewEmployee from './pages/Employee/BankManagerPages/RegisterNewEmployee'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -96,6 +98,8 @@ function App() {
          <Route path='employees' element={<EmployeeManagement/>}/>
          <Route path='performance' element={<PerformanceMonitorin/>}/>
          <Route path='operations' element={<BranchOperation/>}/>
+         <Route path='employees/:employeeId/change-role' element={<ChangeRoles />} />
+         <Route path='register-employees' element={<RegisterNewEmployee/>}/>
       </Route>
 
 

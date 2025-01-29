@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useEmployeeStore from '../../store/employeeStore';
 
 const EmployeeTable = () => {
+    const navigate = useNavigate();
     const { 
         filteredEmployees, 
         isLoading, 
@@ -44,6 +46,10 @@ const EmployeeTable = () => {
             5: 'bg-gray-100 text-gray-800'
         };
         return colors[roleId] || 'bg-gray-100 text-gray-800';
+    };
+
+    const handleChangeRole = (employeeId) => {
+        navigate(`/employee/bank-manager/employees/${employeeId}/change-role`);
     };
 
     if (isLoading) return (
@@ -101,6 +107,9 @@ const EmployeeTable = () => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Assigned Date
                             </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -125,6 +134,14 @@ const EmployeeTable = () => {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {new Date(employee.assigned_at).toLocaleDateString()}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <button
+                                        onClick={() => handleChangeRole(employee.id)}
+                                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                    >
+                                        Change Role
+                                    </button>
                                 </td>
                             </tr>
                         ))}

@@ -33,6 +33,24 @@ const useEmployeeStore = create((set, get) => ({
         }
     },
 
+    updateEmployeeRole: async (employeeId, roleId) => {
+        try {
+            await api.put(`/users/employees/${employeeId}/role`, { roleId });
+            set((state) => ({
+                employees: state.employees.map((emp) =>
+                    emp.user_id === employeeId ? { ...emp, role_id: roleId } : emp
+                ),
+                filteredEmployees: state.filteredEmployees.map((emp) =>
+                    emp.user_id === employeeId ? { ...emp, role_id: roleId } : emp
+                ),
+            }));
+            return { success: true };
+        } catch (error) {
+            console.error('Error updating role:', error);
+            return { success: false, error: error.response?.data?.message || 'Failed to update role' };
+        }
+    },
+
     filterByRole: (roleId) => {
         const { employees } = get();
         set({ selectedRole: roleId });
