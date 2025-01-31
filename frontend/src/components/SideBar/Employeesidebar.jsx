@@ -6,7 +6,7 @@ import { BsBank2 } from 'react-icons/bs';
 import { AiOutlineFileText } from 'react-icons/ai';
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { HiOutlineUserGroup } from 'react-icons/hi';
-import useUserStore from '../store/usersStore';
+import useUserStore from '../../store/usersStore';
 
 function Employeesidebar({ userRole }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);

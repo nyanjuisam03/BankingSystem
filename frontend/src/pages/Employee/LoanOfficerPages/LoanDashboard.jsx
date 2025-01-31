@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import ApexCharts from 'apexcharts';
-import MetricCard from '../../../components/MetricCard';
+import MetricCard from '../../../components/Cards/MetricCard';
 
 function LoanDashboard() {
   const barChartRef = useRef(null);

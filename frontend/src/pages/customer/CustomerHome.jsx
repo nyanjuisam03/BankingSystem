@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import useUserStore from '../../store/usersStore'
 import { useNavigate } from 'react-router-dom';
-import Customersidebar from '../../components/Customersidebar';
+import Customersidebar from '../../components/SideBar/Customersidebar';
 import { Outlet } from 'react-router-dom';
 
 function CustomerHome() {

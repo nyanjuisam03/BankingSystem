@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import Employeesidebar from '../../components/Employeesidebar';
+import Employeesidebar from '../../components/SideBar/Employeesidebar';
 import useUserStore from '../../store/usersStore';
 
 function EmployeeHomepage() {
