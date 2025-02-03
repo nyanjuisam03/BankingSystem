@@ -35,6 +35,7 @@ import PerformanceMonitorin from './pages/Employee/BankManagerPages/PerformanceM
 import BranchOperation from './pages/Employee/BankManagerPages/BranchOperation'
 import ChangeRoles from './pages/Employee/BankManagerPages/ChangeRoles'
 import RegisterNewEmployee from './pages/Employee/BankManagerPages/RegisterNewEmployee'
+import LoanDetailsPage from './pages/customer/LoanDetailsPage'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -60,6 +61,7 @@ function App() {
           <Route path='loan'>
             <Route path='application' element={<LoanFile/>}/>
             <Route path='status' element={<LoanStatus/>}/>
+            <Route path="loan-details/:loanId" element={<LoanDetailsPage />} />
           </Route>
           <Route path='statements' element={<AccountStatement/>}/>
           <Route path='booking-ticket' element={<BookingTicket/>}/>

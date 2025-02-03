@@ -4,6 +4,7 @@ import accountStore from '../../store/accountStore';
 import { useNavigate } from 'react-router-dom';
 import { BsCreditCard2Front, BsPlusCircle } from 'react-icons/bs';
 
+
 const AccountOverview = () => {
   const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
@@ -46,8 +47,8 @@ const AccountOverview = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">My Accounts</h1>
         <button
-          onClick={() => navigate('/create-account')}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          onClick={() => navigate('/customer/accounts/create')}
+          className="flex items-center gap-2 border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white disabled:bg-gray-400"
         >
           <BsPlusCircle size={20} />
           <span>New Account</span>
@@ -59,7 +60,7 @@ const AccountOverview = () => {
           <p className="text-gray-500 mb-4">You don't have any accounts yet.</p>
           <button
             onClick={() => navigate('/create-account')}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700"
           >
             Open Your First Account
           </button>
@@ -75,7 +76,7 @@ const AccountOverview = () => {
                 <h2 className="text-xl font-bold">
                   {getAccountTypeName(account.account_type)}
                 </h2>
-                <BsCreditCard2Front className="h-6 w-6 text-blue-600" />
+                <BsCreditCard2Front className="h-6 w-6 text-gray-600" />
               </div>
               <div className="space-y-2">
                 <div>
@@ -84,7 +85,7 @@ const AccountOverview = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Balance</p>
-                  <p className="text-2xl font-bold text-blue-600">
+                  <p className="text-2xl font-bold text-gray-600">
                     Ksh {account.balance?.toLocaleString()}
                   </p>
                 </div>

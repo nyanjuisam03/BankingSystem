@@ -37,7 +37,7 @@ function LoanStatus() {
 
   const getLoanStatusColor = (status) => {
     const statusColors = {
-      pending: 'bg-yellow-100 text-yellow-800',
+      draft: 'bg-yellow-100 text-yellow-800',
       approved: 'bg-green-100 text-green-800',
       rejected: 'bg-red-100 text-red-800',
       default: 'bg-gray-100 text-gray-800'
@@ -77,8 +77,8 @@ function LoanStatus() {
       <h1 className="text-2xl font-bold text-gray-900">My Loans</h1>
       <div className="mt-4 sm:mt-0">
         <button
-          onClick={() => navigate('/create-loan')}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          onClick={() => navigate('/customer/loan/application')}
+          className="border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white disabled:bg-gray-400"
         >
           Apply for New Loan
         </button>
@@ -87,7 +87,7 @@ function LoanStatus() {
 
     <div className="mb-6">
       <div className="flex space-x-4">
-        {['all', 'pending', 'approved', 'rejected'].map((filterOption) => (
+        {['all', 'draft', 'approved', 'rejected'].map((filterOption) => (
           <button
             key={filterOption}
             onClick={() => setFilter(filterOption)}
@@ -108,15 +108,15 @@ function LoanStatus() {
         <p className="text-gray-500">No loans found.</p>
       </div>
     ) : (
-      <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        <ul className="divide-y divide-gray-200">
+      <div className="bg-white shadow overflow-hidden sm:rounded-md py-3">
+        <ul className="divide-y divide-gray-200 ">
           {filteredLoans.map((loan) => (
             <li key={loan.id}>
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
-                    <p className="text-sm font-medium text-blue-600 truncate">
-                      {loan.loan_type} Loan
+                    <p className="text-sm font-medium text-gray-600 truncate">
+                    {loan.loan_type.charAt(0).toUpperCase() + loan.loan_type.slice(1)} Loan
                     </p>
                     <p className="mt-2 flex items-center text-sm text-gray-500">
                       Amount: {formatCurrency(loan.amount)}
@@ -124,10 +124,10 @@ function LoanStatus() {
                   </div>
                   <div className="flex flex-col items-end">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLoanStatusColor(loan.status)}`}>
-                      {loan.status}
+                    {loan.status.charAt(0).toUpperCase() + loan.status.slice(1)}
                     </span>
                     <p className="mt-2 text-sm text-gray-500">
-                      Applied on: {new Date(loan.created_at).toLocaleDateString()}
+                      Applied on: {new Date(loan.application_date).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ function LoanStatus() {
                       </p>
                     </div>
                     <button
-                      onClick={() => navigate(`/loan-details/${loan.id}`)}
+                      onClick={() => navigate(`/customer/loan/loan-details/${loan.id}`)}
                       className="mt-2 sm:mt-0 text-sm text-blue-600 hover:text-blue-800"
                     >
                       View Details →

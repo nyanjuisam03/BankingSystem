@@ -242,6 +242,25 @@ const useLoanStore = create((set, get) => ({
   },
 
 
+  fetchLoanDetails: async (loanId) => {
+    if (!loanId) {
+      set({ error: 'Loan ID is required', loading: false });
+      throw new Error('Loan ID is required');
+    }
+  
+    set({ loading: true, error: null });
+  
+    try {
+      const response = await api.get(`/loans/loans/${loanId}`);
+      set({ loanDetails: response.data, loading: false, error: null });
+      return response.data;
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 'Error fetching loan details';
+      set({ error: errorMessage, loading: false });
+      throw new Error(errorMessage);
+    }
+  },
+
   fetchAllLoans: async () => {
     try {
       set({ loading: true, error: null });

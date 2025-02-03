@@ -291,43 +291,24 @@ exports.updateLoanStatus = (req, res) => {
 
 
 exports.getLoanDetails = (req, res) => {
-    const { id } = req.params;
-    const user_id = req.headers['user-id'];
+    const id = req.body.id || req.query.id || req.params.id;
+
+    if (!id) {
+        return res.status(400).json({ message: 'Loan ID is required' });
+    }
 
     const query = `
-        SELECT 
-            la.*,
-            (SELECT JSON_ARRAYAGG(
-                JSON_OBJECT(
-                    'id', ld.id,
-                    'document_type', ld.document_type,
-                    'file_name', ld.file_name,
-                    'upload_date', ld.upload_date
-                )
-            ) FROM loan_documents ld WHERE ld.loan_application_id = la.id) as documents,
-            (SELECT JSON_ARRAYAGG(
-                JSON_OBJECT(
-                    'status', lsh.status,
-                    'notes', lsh.notes,
-                    'changed_at', lsh.changed_at
-                )
-            ) FROM loan_status_history lsh WHERE lsh.loan_application_id = la.id) as status_history
-        FROM loan_applications la
-        WHERE la.id = ? AND la.user_id = ?
+        SELECT * FROM loan_applications
+        WHERE id = ?
     `;
 
-    db.query(query, [id, user_id], (err, results) => {
+    db.query(query, [id], (err, results) => {
         if (err) {
-            return res.status(500).json({
-                message: 'Error fetching loan details',
-                error: err
-            });
+            return res.status(500).json({ message: 'Error fetching loan details', error: err });
         }
 
         if (results.length === 0) {
-            return res.status(404).json({
-                message: 'Loan application not found'
-            });
+            return res.status(404).json({ message: 'Loan not found' });
         }
 
         res.json(results[0]);

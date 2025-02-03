@@ -53,12 +53,12 @@ function Customersidebar() {
         },
       ],
     },
-    {
-      title: 'Transaction History',
-      icon: <BiHistory size={20} />,
-      path: '/customer/transaction-history',
-      permission: 'view_transaction_history',
-    },
+    // {
+    //   title: 'Transaction History',
+    //   icon: <BiHistory size={20} />,
+    //   path: '/customer/transaction-history',
+    //   permission: 'view_transaction_history',
+    // },
     {
       title: 'Personal Information',
       icon: <RiUserLine size={20} />,

@@ -74,7 +74,7 @@ const useUserStore = create(
             updateUser: async (userId, userData) => {
                 set({ isLoading: true, error: null });
                 try {
-                    const response = await api.put(`/users/${userId}`, userData);
+                    const response = await api.put(`/users/users/${userId}`, userData);
                     set({ user: response.data, isLoading: false });
                     return response.data;
                 } catch (error) {

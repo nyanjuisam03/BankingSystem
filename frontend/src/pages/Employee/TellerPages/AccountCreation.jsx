@@ -98,7 +98,7 @@ function AccountCreation() {
   
 
   return (
-    <div className="w-full max-w-xl mx-auto bg-white shadow-md p-6 rounded-lg">
+    <div className="w-full max-w-7xl mx-auto bg-white shadow-md p-6 rounded-lg">
     <h2 className="text-xl font-bold mb-4">Create Account for User</h2>
     
     {/* Search Form */}

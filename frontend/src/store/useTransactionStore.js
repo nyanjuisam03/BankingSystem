@@ -12,6 +12,7 @@ const useTransactionStore = create((set, get) => ({
     isLoading: false,
     error: null,
 
+    
     // Fetch transactions for a specific account
     fetchTransactions: async (accountId) => {
         if (!accountId) {

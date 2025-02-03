@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import { FaRegUserCircle } from "react-icons/fa";
 import useUserStore from '../store/usersStore';
+
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -35,20 +37,18 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex justify-between items-center p-4 bg-white shadow-md">
-      {/* Logo */}
-      <div className="text-xl font-bold">
-        Your Logo
-      </div>
+    <nav className="flex justify-end p-2 bg-white shadow-md">
+     
+    
 
       {/* Profile Dropdown */}
       <div className="relative" ref={dropdownRef}>
         {/* Profile Icon */}
         <button 
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="hover:bg-gray-100 rounded-full p-2 focus:outline-none"
+          className="hover:bg-gray-100 rounded-full px-9 focus:outline-none"
         >
-          <FaUser className="h-6 w-6 text-gray-600" />
+          <FaRegUserCircle className="h-6 w-6 text-gray-600" />
         </button>
 
         {/* Dropdown Menu */}

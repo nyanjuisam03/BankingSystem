@@ -96,7 +96,7 @@ function VerifyAccountStepTwo({ onBack }) {
 
 
     return (
-        <div className="w-full max-w-2xl p-6 bg-white shadow rounded-lg">
+        <div className="w-full max-w-7xl p-6 bg-white shadow rounded-lg">
             <header className="mb-4">
                 <h2 className="text-2xl font-bold">Step 2: Verify Account Details</h2>
             </header>

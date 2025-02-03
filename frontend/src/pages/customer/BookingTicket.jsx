@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 const ticketSchema = z.object({
-    ticketType: z.enum(["IDENTITY_VERIFICATION", "DISPUTE_RESOLUTION", "SPECIAL_SERVICES"], {
+    ticketType: z.enum(["Registration Account Issues", "Loan Application Issues"], {
         required_error: "Please select a service type"
     }),
     appointmentDate: z.string().refine((date) => {
@@ -119,7 +119,7 @@ function BookingTicket() {
 };
 
     return (
-        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
+        <div className="max-w-6xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
                 Book Bank Visit
             </h2>
@@ -136,9 +136,9 @@ function BookingTicket() {
                         }`}
                     >
                         <option value="">Select a service</option>
-                        <option value="IDENTITY_VERIFICATION">Identity Verification/KYC</option>
-                        <option value="DISPUTE_RESOLUTION">Dispute Resolution</option>
-                        <option value="SPECIAL_SERVICES">Special Services</option>
+                        <option value="Registration Account Issues">Registration Account Issues</option>
+                        <option value="Loan Application Issues">Loan Application Issues</option>
+                        
                     </select>
                     {errors.ticketType && (
                         <p className="text-red-500 text-sm mt-1">
@@ -202,11 +202,12 @@ function BookingTicket() {
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className={`w-full py-2 px-4 rounded font-bold text-white 
-                        ${isLoading 
-                            ? 'bg-gray-400 cursor-not-allowed' 
-                            : 'bg-blue-600 hover:bg-blue-700'
-                        }`}
+                    className={`w-full py-2 px-4 rounded font-bold 
+                    border border-gray-400 text-gray-400 
+                    ${isLoading 
+                        ? 'bg-gray-200 cursor-not-allowed' 
+                        : 'bg-white hover:bg-gray-800 hover:text-white'
+                    }`}
                 >
                     {isLoading ? 'Booking...' : 'Book Appointment'}
                 </button>

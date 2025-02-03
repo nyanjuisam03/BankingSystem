@@ -45,7 +45,7 @@ function PasswordReset() {
 
 
   return (
-      <div className="w-full max-w-md mx-auto bg-white shadow rounded-lg p-6">
+      <div className="w-full max-w-7xl mx-auto bg-white shadow rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4">Reset User Password</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (

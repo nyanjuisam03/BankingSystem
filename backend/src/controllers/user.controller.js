@@ -190,7 +190,7 @@ exports.getUserDetails = async (req, res) => {
     const userId = req.params.id;
     
     const query = `
-        SELECT u.id, u.username, u.email, u.first_name, u.last_name, r.name as role_name
+        SELECT u.id, u.username, u.email, u.password, u.first_name, u.last_name, r.name as role_name
         FROM users u
         LEFT JOIN user_roles ur ON u.id = ur.user_id
         LEFT JOIN roles r ON ur.role_id = r.id

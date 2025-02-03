@@ -18,7 +18,7 @@ function ChosingTicketsStepTwo({ ticket, onBack }) {
       }
     }
   return (
-    <div className="w-full max-w-2xl border rounded shadow-lg p-4 bg-white">
+    <div className="w-full max-w-7xl border rounded shadow-lg p-4 bg-white">
     <header className="mb-4">
       <h2 className="text-2xl font-bold">Handle Ticket #{ticket.ticket_id}</h2>
     </header>

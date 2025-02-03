@@ -1,8 +1,9 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import accountStore from '../../store/accountStore';
 import useTransactionStore from '../../store/useTransactionStore';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import AccountTransactionsTable from '../../components/Tables/AccountTransactionsTable';
 
 function AccountDetails() {
     const { accountId } = useParams(); 
@@ -17,7 +18,19 @@ function AccountDetails() {
     const [transactionType, setTransactionType] = useState('');
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
-    const navigate=useNavigate()
+    const navigate = useNavigate();
+
+    // Helper function to convert account type number to string
+    const getAccountTypeLabel = (typeNumber) => {
+        const accountTypes = {
+            '1': 'Savings',
+            '2': 'Premium Savings',
+            '3': 'Student Savings',
+            '4': 'Business Savings'
+        };
+        return accountTypes[typeNumber] || 'Unknown';
+    };
+
     useEffect(() => {
         fetchAccountDetail(accountId);
     }, [accountId, fetchAccountDetail]);
@@ -31,16 +44,14 @@ function AccountDetails() {
     };
 
     const handleTransactionSubmit = async (e) => {
-        e.preventDefault(); // Prevent form submission
+        e.preventDefault();
         
         try {
-            // Validate amount
             if (!amount || parseFloat(amount) <= 0) {
                 alert('Please enter a valid amount');
                 return;
             }
 
-            // Validate description
             if (!description.trim()) {
                 alert('Please enter a description');
                 return;
@@ -53,15 +64,9 @@ function AccountDetails() {
                 description: description.trim(),
             });
 
-            // Only proceed if transaction was successful
             if (result) {
-                // Reset form and close modal
                 resetForm();
-                
-                // Refresh account details
                 await fetchAccountDetail(accountId);
-                
-                // Show success message
                 alert(`${transactionType === 'deposit' ? 'Deposit' : 'Withdrawal'} successful!`);
             }
         } catch (err) {
@@ -71,13 +76,21 @@ function AccountDetails() {
     };
 
     const handleDepositClick = () => {
-        resetForm(); // Reset form before opening
+        if (account.status === 'pending' || account.status === 'rejected') {
+            alert('Your account status is not eligible for transactions.');
+            return;
+        }
+        resetForm();
         setTransactionType('deposit');
         setShowModal(true);
     };
 
     const handleWithdrawClick = () => {
-        resetForm(); // Reset form before opening
+        if (account.status === 'pending' || account.status === 'rejected') {
+            alert('Your account status is not eligible for transactions.');
+            return;
+        }
+        resetForm();
         setTransactionType('withdrawal');
         setShowModal(true);
     };
@@ -89,67 +102,71 @@ function AccountDetails() {
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
+    return (
+        <div>
+    
+            <div>
+                <span onClick={() => navigate(-1)} className="cursor-pointer">Go Back</span>
+            </div>
+            {account ? (
+                <>
+                <h1 className='text-xl font-bold py-3'>Account Details for {account.account_number}</h1>
+                    <div className="bg-white p-4 rounded-lg shadow-lg">
+                    
+                        <table className="table-auto border-collapse border border-gray-300 w-full">
+                            <thead>
+                                <tr>
+                                    <th className="border px-4 py-2">Account Number</th>
+                                    <th className="border px-4 py-2">Account Type</th>
+                                    <th className="border px-4 py-2">Balance</th>
+                                    <th className="border px-4 py-2">Status</th>
+                                    <th className="border px-4 py-2">Initial Deposit</th>
+                                    <th className="border px-4 py-2">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="border px-4 py-2">{account.account_number}</td>
+                                    <td className="border px-4 py-2">{getAccountTypeLabel(account.account_type)}</td>
+                                    <td className="border px-4 py-2">{account.balance}</td>
+                                    <td className="border px-4 py-2">{account.status}</td>
+                                    <td className="border px-4 py-2">{account.intial_deposit}</td>
+                                    <td className="border px-4 py-2">{new Date(account.created_at).toLocaleString()}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-
-  return (
-    <div>
-    <h1>Account Details</h1>
-    <div>
-        <span >Go Back</span>
-    </div>
-    {account ? (
-      <>
-        <table className="table-auto border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="border px-4 py-2">ID</th>
-              <th className="border px-4 py-2">User ID</th>
-              <th className="border px-4 py-2">Account Number</th>
-              <th className="border px-4 py-2">Account Type</th>
-              <th className="border px-4 py-2">Balance</th>
-              <th className="border px-4 py-2">Status</th>
-              <th className="border px-4 py-2">Initial Deposit</th>
-              <th className="border px-4 py-2">Created At</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border px-4 py-2">{account.id}</td>
-              <td className="border px-4 py-2">{account.user_id}</td>
-              <td className="border px-4 py-2">{account.account_number}</td>
-              <td className="border px-4 py-2">{account.account_type}</td>
-              <td className="border px-4 py-2">{account.balance}</td>
-              <td className="border px-4 py-2">{account.status}</td>
-              <td className="border px-4 py-2">{account.intial_deposit}</td>
-              <td className="border px-4 py-2">{new Date(account.created_at).toLocaleString()}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div className="mt-4 flex gap-4">
+                    <div className="mt-4 flex gap-4">
                         <button
                             onClick={handleDepositClick}
                             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                            disabled={account.status === 'pending' || account.status === 'rejected'}
                         >
                             Deposit
                         </button>
                         <button
                             onClick={handleWithdrawClick}
                             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                            disabled={account.status === 'pending' || account.status === 'rejected'}
                         >
                             Withdraw
                         </button>
                     </div>
 
-      </>
-    ) : (
-      <p>No account details found.</p>
-    )}
+<div>
+    <AccountTransactionsTable accountId={accountId}/>
+</div>
 
-    {/* Transaction Modal */}
-    {showModal && (
+                </>
+            ) : (
+                <p>No account details found.</p>
+            )}
+
+            {showModal && (
                 <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <form onSubmit={handleTransactionSubmit}> {/* Wrap in form */}
+                        <form onSubmit={handleTransactionSubmit}>
                             <h2 className="text-xl font-bold mb-4">
                                 {transactionType === 'deposit' ? 'Deposit Funds' : 'Withdraw Funds'}
                             </h2>
@@ -197,8 +214,9 @@ function AccountDetails() {
                     </div>
                 </div>
             )}
-  </div>
-  )
+            
+        </div>
+    );
 }
 
-export default AccountDetails
+export default AccountDetails;
