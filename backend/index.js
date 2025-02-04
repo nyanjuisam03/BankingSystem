@@ -7,6 +7,7 @@ const userRoutes = require('./src/routes/user.routes');
 const LoanRoutes=require('./src/routes/loans.routes')
 const BookingTicketRoutes=require('./src/routes/bookingticket.route')
 const CardRoutes=require('./src/routes/card.routes')
+const ServiceRoute=require('./src/routes/manageTickets.route.')
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/loans', LoanRoutes)
 app.use('/api/booking', BookingTicketRoutes)
 app.use('/api/card', CardRoutes);
+app.use('/api/management' ,ServiceRoute)
 
 
 

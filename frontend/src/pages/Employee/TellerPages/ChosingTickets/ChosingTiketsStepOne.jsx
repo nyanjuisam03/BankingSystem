@@ -12,7 +12,7 @@ function ChosingTiketsStepOne({ onNext }) {
       if (isLoading) return <div className="p-4">Loading tickets...</div>
 
   return (
-    <div className="w-full max-w-2xl border p-6 rounded shadow-lg">
+    <div className="w-full max-w-7xl border p-6 rounded shadow-lg bg-white">
     <div className="mb-4">
       <h2 className="text-2xl font-bold">Select Ticket to Resolve</h2>
     </div>

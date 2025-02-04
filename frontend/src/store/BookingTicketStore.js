@@ -75,12 +75,19 @@ const useTicketStore = create((set, get) => ({
     fetchTickets: async () => {
         set({ isLoading: true, error: null });
         try {
-            const response = await api.get('/booking/all-bookingtickets'); // Call the endpoint
+            const response = await api.get('/booking/all-bookingtickets');
+            
+            // Filter tickets for Registration Account Issues and PENDING status
+            const filteredTickets = response.data.data.filter(ticket => 
+                ticket.ticket_type === 'Registration Account Issues' && 
+                ticket.status === 'PENDING'
+            );
+            
             set({
-                allTickets: response.data.data, // Set tickets from the response
+                allTickets: filteredTickets, // Set only the filtered tickets
                 isLoading: false,
             });
-            console.log('Tickets fetched successfully:', response.data.data);
+            console.log('Filtered tickets fetched successfully:', filteredTickets);
         } catch (error) {
             console.error('Error fetching tickets:', error);
             set({

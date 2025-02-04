@@ -6,10 +6,10 @@ export const generateTicketData = () => {
     while (startDate <= endDate) {
       tickets.push({
         date: startDate.toISOString().split('T')[0],
-        pending: Math.floor(Math.random() * 10),
-        confirmed: Math.floor(Math.random() * 3),
-        completed: Math.floor(Math.random() * 4),
-        accountVerified: Math.floor(Math.random() * 5)
+        pending: Math.floor(Math.random() * 3),
+        confirmed: Math.floor(Math.random() * 2),
+        completed: Math.floor(Math.random() * 2),
+        accountVerified: Math.floor(Math.random() * 2)
       });
   
       startDate.setDate(startDate.getDate() + 1);

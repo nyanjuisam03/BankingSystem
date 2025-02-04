@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Customersidebar from '../../components/SideBar/Customersidebar';
 import Navbar from '../../components/Navbar';
 
+
 function CustomerHome() {
   return (
     <div className='flex h-screen'>

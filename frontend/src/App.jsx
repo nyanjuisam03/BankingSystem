@@ -36,6 +36,8 @@ import BranchOperation from './pages/Employee/BankManagerPages/BranchOperation'
 import ChangeRoles from './pages/Employee/BankManagerPages/ChangeRoles'
 import RegisterNewEmployee from './pages/Employee/BankManagerPages/RegisterNewEmployee'
 import LoanDetailsPage from './pages/customer/LoanDetailsPage'
+import RequistionForm from "./pages/Employee/RequistionForm"
+import IncidentPage from './pages/Employee/IncidentPage'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -86,6 +88,8 @@ function App() {
          <Route path='card-creation' element={<CardCraetion/>}/>
          <Route path='account-creation' element={<AccountCreation/>}/>
          <Route path='password-reset' element={<PasswordReset/>}/>
+         <Route path='requistion' element={<RequistionForm/>}/>
+         <Route path='incident' element={<IncidentPage/>}/>
         </Route>
 
         <Route path='loan_officer'>

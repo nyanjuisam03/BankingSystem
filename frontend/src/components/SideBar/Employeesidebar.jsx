@@ -98,10 +98,10 @@ function Employeesidebar({ userRole }) {
                         title: 'Making Accounts',
                         path: '/employee/teller/account-creation',
                     },
-                    {
-                        title: 'Debit/Credit Cards',
-                        path: '/employee/teller/card-creation',
-                    },
+                    // {
+                    //     title: 'Debit/Credit Cards',
+                    //     path: '/employee/teller/card-creation',
+                    // },
                 ],
             },
             customerSupport: {
@@ -121,6 +121,20 @@ function Employeesidebar({ userRole }) {
                     {
                         title: 'Check Users Transactions',
                         path: '/employee/teller/virtual-transactions',
+                    },
+                ],
+            },
+            HelpDesk: {
+                title: 'Helpdesk Services',
+                icon: <HiOutlineUserGroup size={20} />,
+                submenu: [
+                    {
+                        title: 'Requistion',
+                        path: '/employee/teller/requistion',
+                    },
+                    {
+                        title: 'Incident Report',
+                        path: '/employee/teller/incident',
                     },
                 ],
             },

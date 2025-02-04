@@ -62,7 +62,7 @@ function TellerDashboard() {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-2 gap-6">
         <div ref={barChartRef}></div>
         <div ref={lineChartRef}></div>
       </div>

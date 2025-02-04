@@ -1,6 +1,7 @@
 import React from 'react'
 import useTicketStore from '../../../../store/BookingTicketStore'
 
+
 function ChosingTicketsStepTwo({ ticket, onBack }) {
     const { confirmTicket, completeTicket, isLoading, error } = useTicketStore()
 
@@ -36,6 +37,18 @@ function ChosingTicketsStepTwo({ ticket, onBack }) {
           <p className="font-medium">Description</p>
           <p>{ticket.description}</p>
         </div>
+       
+        <div className="col-span-2">
+          <p className="font-medium">Appointment Date</p>
+          <p>{ticket.appointment_date}</p>
+        </div>
+        
+        <div className="col-span-2">
+          <p className="font-medium">Appointment Time</p>
+          <p>{ticket.appointment_time}</p>
+        </div>
+      
+        
       </div>
 
       <div className="flex justify-between mt-6">
