@@ -110,7 +110,7 @@ function LoanApplications() {
     }
   };
   return (
-    <div className="w-full max-w-xl mx-auto bg-white shadow-md p-6 rounded-lg">
+    <div className="w-full max-w-7xl mx-auto bg-white shadow-md p-6 rounded-lg">
       <h2 className="text-xl font-bold mb-4">Create Loan for User</h2>
       
       {/* Search Form */}
@@ -127,13 +127,13 @@ function LoanApplications() {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Enter username to search"
               disabled={isSearching}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
           <button
             type="submit"
             disabled={isSearching || !searchQuery.trim()}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
           >
             Search
           </button>
@@ -141,7 +141,7 @@ function LoanApplications() {
 
         {error && (
           <div className="mt-2 text-sm text-red-600">
-            {error}
+           <h2>User does not exist</h2>
           </div>
         )}
 
@@ -179,6 +179,20 @@ function LoanApplications() {
       {/* Loan Creation Form */}
       {selectedUser && (
         <form onSubmit={handleCreateLoan} className="space-y-4 border-t pt-4">
+
+<div>
+    <label htmlFor="full_name" className="block text-sm font-medium text-gray-700">Full Name</label>
+    <input
+      id="full_name"
+      name="full_name"
+      type="text"
+      value={formData.full_name}
+      onChange={handleInputChange}
+      placeholder="Enter full name"
+      className="w-full border border-gray-300 rounded px-3 py-2"
+      required
+    />
+  </div>
           <div>
             <label htmlFor="loan_type" className="block text-sm font-medium text-gray-700">Loan Type</label>
             <select
@@ -186,7 +200,7 @@ function LoanApplications() {
               name="loan_type"
               value={formData.loan_type}
               onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border p-2 rounded"
               required
             >
               <option value="">Select Loan Type</option>
@@ -206,7 +220,7 @@ function LoanApplications() {
               value={formData.amount}
               onChange={handleInputChange}
               placeholder="Enter loan amount"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
               required
             />
           </div>
@@ -220,7 +234,7 @@ function LoanApplications() {
               value={formData.purpose}
               onChange={handleInputChange}
               placeholder="Enter loan purpose"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
               required
             />
           </div>
@@ -234,7 +248,7 @@ function LoanApplications() {
               value={formData.term_months}
               onChange={handleInputChange}
               placeholder="Enter loan term in months"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
               required
             />
           </div>
@@ -248,7 +262,7 @@ function LoanApplications() {
               value={formData.monthly_income}
               onChange={handleInputChange}
               placeholder="Enter monthly income"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
               required
             />
           </div>
@@ -260,7 +274,7 @@ function LoanApplications() {
               name="employment_status"
               value={formData.employment_status}
               onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border p-2 rounded"
               required
             >
               <option value="">Select Status</option>
@@ -280,7 +294,7 @@ function LoanApplications() {
               value={formData.employer_name}
               onChange={handleInputChange}
               placeholder="Enter employer name"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
@@ -293,9 +307,23 @@ function LoanApplications() {
               value={formData.job_title}
               onChange={handleInputChange}
               placeholder="Enter job title"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
+
+          <div>
+    <label htmlFor="kra_pin" className="block text-sm font-medium text-gray-700">KRA PIN</label>
+    <input
+      id="kra_pin"
+      name="kra_pin"
+      type="text"
+      value={formData.kra_pin}
+      onChange={handleInputChange}
+      placeholder="Enter KRA PIN (e.g., A123456789)"
+      className="w-full border border-gray-300 rounded px-3 py-2"
+      required
+    />
+  </div>
 
           <div>
             <label htmlFor="years_employed" className="block text-sm font-medium text-gray-700">Years Employed</label>
@@ -307,7 +335,7 @@ function LoanApplications() {
               onChange={handleInputChange}
               placeholder="Enter years employed"
               step="0.1"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
@@ -322,7 +350,7 @@ function LoanApplications() {
               placeholder="Enter credit score"
               min="300"
               max="850"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
@@ -337,13 +365,52 @@ function LoanApplications() {
               value={formData.existing_loans_monthly_payment}
               onChange={handleInputChange}
               placeholder="Enter existing monthly payments"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
+          <div>
+    <label htmlFor="passport_photo" className="block text-sm font-medium text-gray-700">Passport Photo</label>
+    <input
+      id="passport_photo"
+      name="passport_photo"
+      type="file"
+      accept="image/*"
+      onChange={handleInputChange}
+      className="w-full border border-gray-300 rounded px-3 py-2"
+      required
+    />
+  </div>
+
+  <div>
+    <label htmlFor="national_id" className="block text-sm font-medium text-gray-700">National ID (Front)</label>
+    <input
+      id="national_id"
+      name="national_id"
+      type="file"
+      accept="image/*"
+      onChange={handleInputChange}
+      className="w-full border border-gray-300 rounded px-3 py-2"
+      required
+    />
+  </div>
+
+  <div>
+    <label htmlFor="national_id_back" className="block text-sm font-medium text-gray-700">National ID (Back)</label>
+    <input
+      id="national_id_back"
+      name="national_id_back"
+      type="file"
+      accept="image/*"
+      onChange={handleInputChange}
+      className="w-full border border-gray-300 rounded px-3 py-2"
+      required
+    />
+  </div>
+
           <button
             type="submit"
-            className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+            className="w-full px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
           >
             Create Loan
           </button>

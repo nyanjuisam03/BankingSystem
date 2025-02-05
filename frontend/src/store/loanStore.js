@@ -280,6 +280,29 @@ const useLoanStore = create((set, get) => ({
     }
   },
 
+
+
+  fetchPendingLoans: async () => {
+    try {
+        set({ loading: true, error: null });
+        const response = await api.get('/loans/all-loans');
+        
+        // Filter only pending loans
+        const pendingLoans = response.data.loans.filter(loan => 
+            loan.status === 'draft'
+        );
+        
+        set({ 
+            loans: pendingLoans, 
+            loading: false 
+        });
+    } catch (err) {
+        set({ 
+            error: err.response?.data?.message || 'Failed to fetch pending loans', 
+            loading: false 
+        });
+    }
+},
   // Utility functions
   clearError: () => set({ error: null }),
   clearSuccessMessage: () => set({ successMessage: null }),

@@ -1,9 +1,7 @@
 import React from 'react'
 import useTicketStore from '../../../../store/BookingTicketStore'
 
-
-
-function ChosingTicketsStepTwo({ ticket, onBack }) {
+function StepTwoLoanTickets({ ticket,onBack }) {
     const { confirmTicket, completeTicket, isLoading, error } = useTicketStore()
 
     const handleStatusUpdate = async (newStatus) => {
@@ -19,6 +17,18 @@ function ChosingTicketsStepTwo({ ticket, onBack }) {
         console.error('Failed to update ticket:', err)
       }
     }
+
+    const formatAppointmentDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      };
   return (
     <div className="w-full max-w-7xl border rounded shadow-lg p-4 bg-white">
     <header className="mb-4">
@@ -26,10 +36,10 @@ function ChosingTicketsStepTwo({ ticket, onBack }) {
     </header>
     <main className="space-y-6">
       <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
-        <div>
+        {/* <div>
           <p className="font-medium">Subject</p>
           <p>{ticket.subject}</p>
-        </div>
+        </div> */}
         <div>
           <p className="font-medium">Current Status</p>
           <p className="capitalize">{ticket.status}</p>
@@ -41,7 +51,7 @@ function ChosingTicketsStepTwo({ ticket, onBack }) {
        
         <div className="col-span-2">
           <p className="font-medium">Appointment Date</p>
-          <p>{ticket.appointment_date}</p>
+          <p>{formatAppointmentDate(ticket.appointment_date)}</p>
         </div>
         
         <div className="col-span-2">
@@ -95,4 +105,4 @@ function ChosingTicketsStepTwo({ ticket, onBack }) {
   )
 }
 
-export default ChosingTicketsStepTwo
+export default StepTwoLoanTickets

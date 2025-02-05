@@ -2,16 +2,14 @@ import React from 'react'
 import { useState,useEffect } from 'react'
 import useTicketStore from '../../../../store/BookingTicketStore'
 
+function StepOneLoanTickets({ onNext }) {
 
-function ChosingTiketsStepOne({ onNext }) {
-    const { allTickets, fetchTickets, isLoading } = useTicketStore()
-
+    const { allTickets, fetchLoanTickets, isLoading } = useTicketStore()
     useEffect(() => {
-        fetchTickets()
-      }, [fetchTickets])
+        fetchLoanTickets()
+      }, [fetchLoanTickets])
     
       if (isLoading) return <div className="p-4">Loading tickets...</div>
-
   return (
     <div className="w-full max-w-7xl border p-6 rounded shadow-lg bg-white">
     <div className="mb-4">
@@ -47,4 +45,4 @@ function ChosingTiketsStepOne({ onNext }) {
   )
 }
 
-export default ChosingTiketsStepOne
+export default StepOneLoanTickets

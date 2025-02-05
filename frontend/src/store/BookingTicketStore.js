@@ -98,6 +98,32 @@ const useTicketStore = create((set, get) => ({
     },
 
 
+
+    fetchLoanTickets: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await api.get('/booking/all-bookingtickets');
+            
+            // Filter tickets for Loan Application Issues and PENDING status
+            const filteredTickets = response.data.data.filter(ticket => 
+                ticket.ticket_type === 'Loan Application Issues' && 
+                ticket.status === 'PENDING'
+            );
+            
+            set({
+                allTickets: filteredTickets,
+                isLoading: false,
+            });
+            console.log('Filtered Loan Application tickets fetched successfully:', filteredTickets);
+        } catch (error) {
+            console.error('Error fetching Loan Application tickets:', error);
+            set({
+                error: error.response?.data?.message || 'Failed to fetch Loan Application tickets',
+                isLoading: false,
+            });
+        }
+    },
+
     completeTicket: async (ticketId) => {
         set({ isLoading: true, error: null })
         try {

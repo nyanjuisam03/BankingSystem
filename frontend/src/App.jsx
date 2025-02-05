@@ -38,6 +38,7 @@ import RegisterNewEmployee from './pages/Employee/BankManagerPages/RegisterNewEm
 import LoanDetailsPage from './pages/customer/LoanDetailsPage'
 import RequistionForm from "./pages/Employee/RequistionForm"
 import IncidentPage from './pages/Employee/IncidentPage'
+import LoanTickets from './pages/Employee/LoanOfficerPages/LoanTickets'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -96,6 +97,9 @@ function App() {
         <Route path='dashboard' element={<LoanDashboard/>}/>
         <Route path='approval' element={<LoanApproval/>}/>
         <Route path='applications' element={<LoanApplications/>}/>
+        <Route path='customer-support' element={<LoanTickets/>}/>
+        <Route path='requisition' element={<RequistionForm/>}/>
+        <Route path='incident' element={<IncidentPage/>}/>
         </Route>
 
 

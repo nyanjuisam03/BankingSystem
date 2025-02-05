@@ -10,14 +10,14 @@ function LoanApproval() {
     loading, 
     error, 
     successMessage,
-    fetchAllLoans,
+    fetchPendingLoans,
     updateLoanStatus,
     setCurrentLoan 
   } = useLoanStore();
 
   useEffect(() => {
-    fetchAllLoans();
-  }, [fetchAllLoans]);
+    fetchPendingLoans();
+  }, [fetchPendingLoans]);
 
   const handleLoanSelect = (loanId) => {
     const selected = loans.find(loan => loan.id === loanId);
@@ -47,7 +47,7 @@ function LoanApproval() {
 
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-7xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">Loan Status Update</h2>
       <p>{step === 1 ? 'Select a loan to review' : 'Review loan details and update status'}</p>
 
@@ -69,63 +69,127 @@ function LoanApproval() {
             <option value="">Select a loan to review</option>
             {loans.map(loan => (
               <option key={loan.id} value={loan.id}>
-                Loan #{loan.id} - ${loan.amount} ({loan.status})
+                Loan ({loan.id}) - Ksh{loan.amount} ({loan.status})
               </option>
             ))}
           </select>
         </div>
       )}
 
-      {step === 2 && currentLoan && (
-        <div className="space-y-6 mt-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="font-medium">Loan Amount</p>
-              <p>${currentLoan.amount}</p>
-            </div>
-            <div>
-              <p className="font-medium">Purpose</p>
-              <p>{currentLoan.purpose}</p>
-            </div>
-            <div>
-              <p className="font-medium">Term (months)</p>
-              <p>{currentLoan.term_months}</p>
-            </div>
-            <div>
-              <p className="font-medium">Credit Score</p>
-              <p>{currentLoan.credit_score}</p>
-            </div>
-            <div>
-              <p className="font-medium">Monthly Income</p>
-              <p>${currentLoan.monthly_income}</p>
-            </div>
-            <div>
-              <p className="font-medium">Current Status</p>
-              <p className="capitalize">{currentLoan.status}</p>
-            </div>
-          </div>
+{step === 2 && currentLoan && (
+  <div className="space-y-6 mt-6">
+    <div className="grid grid-cols-2 gap-4">
+      {/* Existing Loan Details */}
+      <div>
+        <p className="font-medium">Loan Amount</p>
+        <p>Ksh {currentLoan.amount}</p>
+      </div>
+      <div>
+        <p className="font-medium">Purpose</p>
+        <p>{currentLoan.purpose}</p>
+      </div>
+      <div>
+        <p className="font-medium">Term (months)</p>
+        <p>{currentLoan.term_months}</p>
+      </div>
+      <div>
+        <p className="font-medium">Credit Score</p>
+        <p>{currentLoan.credit_score}</p>
+      </div>
+      <div>
+        <p className="font-medium">Monthly Income</p>
+        <p>Ksh {currentLoan.monthly_income}</p>
+      </div>
+      <div>
+        <p className="font-medium">Current Status</p>
+        <p className="capitalize">{currentLoan.status}</p>
+      </div>
 
-          <div className="flex gap-4 justify-end pt-4">
-            <button className="btn-outline" onClick={() => setStep(1)}>
-              Back
-            </button>
-            <button 
-              className="btn btn-danger"
-              onClick={() => handleStatusUpdate('rejected')}
-              disabled={loading}
-            >
-              Reject Loan
-            </button>
-            <button 
-              className="btn btn-success"
-              onClick={() => handleStatusUpdate('approved')}
-              disabled={loading}
-            >
-              Approve Loan
-            </button>
-          </div>
+      {/* New Personal Details */}
+      <div>
+        <p className="font-medium">Full Name</p>
+        <p>John Doe</p>
+      </div>
+      <div>
+        <p className="font-medium">Email</p>
+        <p>johndoe@example.com</p>
+      </div>
+      <div>
+        <p className="font-medium">Phone Number</p>
+        <p>+254 712 345 678</p>
+      </div>
+      <div>
+        <p className="font-medium">KRA PIN</p>
+        <p>A123456789</p>
+      </div>
+      <div>
+        <p className="font-medium">Employer Name</p>
+        <p>Acme Corporation</p>
+      </div>
+      <div>
+        <p className="font-medium">Work Address</p>
+        <p>123 Business Street, Nairobi</p>
+      </div>
+      <div>
+        <p className="font-medium">Position</p>
+        <p>Senior Manager</p>
+      </div>
+      <div>
+        <p className="font-medium">National ID</p>
+        <p>32456789</p>
+      </div>
+    </div>
+
+
+
+    <div className="col-span-2">
+      <p className="font-medium">Passport Photo</p>
+      <div className="w-32 h-40 bg-gray-200 flex items-center justify-center">
+        <span className="text-gray-500">Photo Preview</span>
+        {/* In a real app, you'd use an actual image here */}
+      </div>
+    </div>
+
+    {/* National ID Section */}
+    <div className="col-span-2 grid grid-cols-2 gap-4">
+      <div>
+        <p className="font-medium">National ID Front</p>
+        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+          <span className="text-gray-500">ID Front Preview</span>
         </div>
-      )}
+      </div>
+      <div>
+        <p className="font-medium">National ID Back</p>
+        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+          <span className="text-gray-500">ID Back Preview</span>
+        </div>
+      </div>
+    </div>
+    {/* Existing Buttons */}
+    <div className="flex gap-4 justify-end pt-4">
+      <button 
+        className="px-4 py-2 border rounded hover:bg-gray-50" 
+        onClick={() => setStep(1)}
+      >
+        Back
+      </button>
+      <button 
+        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+        onClick={() => handleStatusUpdate('rejected')}
+        disabled={loading}
+      >
+        Reject Loan
+      </button>
+      <button 
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        onClick={() => handleStatusUpdate('approved')}
+        disabled={loading}
+      >
+        Approve Loan
+      </button>
+    </div>
+  </div>
+)}
     </div>
   )
 }

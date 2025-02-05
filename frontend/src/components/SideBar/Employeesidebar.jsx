@@ -140,24 +140,75 @@ function Employeesidebar({ userRole }) {
             },
             
         },
-        loan_officer: {
-            title: 'Loan Officer',
-            icon: <FaRegMoneyBillAlt size={20} />,
-            submenu: [
-                {
-                    title: 'Dashboard',
-                    path: '/employee/loan_officer/dashboard',
-                },
-                {
-                    title: 'Loan Applications',
-                    path: '/employee/loan_officer/applications',
-                },
-                {
-                    title: 'Loan Approval',
-                    path: '/employee/loan_officer/approval',
-                },
-            ],
-        },
+
+      loan_officer: {
+  dashboard: {
+    title: 'Dashboard',
+    icon: <FaRegMoneyBillAlt size={20} />,
+    submenu: [
+      { 
+        title: 'Dashboard Home', 
+        path: '/employee/loan_officer/dashboard' 
+      },
+    ],
+  },
+  loanManagement: {
+    title: 'Loan Management',
+    icon: <FaRegMoneyBillAlt size={20} />,
+    submenu: [
+      { 
+        title: 'Loan Applications', 
+        path: '/employee/loan_officer/applications' 
+      },
+      { 
+        title: 'Loan Approval', 
+        path: '/employee/loan_officer/approval' 
+      },
+    ],
+  },
+//   disbursement: {
+//     title: 'Loan Disbursement',
+//     icon: <FaRegMoneyBillAlt size={20} />,
+//     submenu: [
+//       { 
+//         title: 'Disbursements Overview', 
+//         path: '/employee/loan_officer/disbursement/overview' 
+//       },
+//       { 
+//         title: 'Pending Disbursements', 
+//         path: '/employee/loan_officer/disbursement/pending' 
+//       },
+//       { 
+//         title: 'Approved Disbursements', 
+//         path: '/employee/loan_officer/disbursement/approved' 
+//       },
+//     ],
+//   },
+  customerSupport: {
+    title: 'Customer Support',
+    icon: <FaRegMoneyBillAlt size={20} />,
+    submenu: [
+      { 
+        title: 'Support Home', 
+        path: '/employee/loan_officer/customer-support' 
+      },
+    ],
+  },
+  helpDesk: {
+    title: 'Helpdesk Services',
+    icon: <FaRegMoneyBillAlt size={20} />,
+    submenu: [
+      { 
+        title: 'Requisition', 
+        path: '/employee/loan_officer/requisition' 
+      },
+      { 
+        title: 'Incident Report', 
+        path: '/employee/loan_officer/incident' 
+      },
+    ],
+  },
+},
     };
 
     const getMenuItemsByRole = (userRole) => {
@@ -171,7 +222,7 @@ function Employeesidebar({ userRole }) {
                 // Flatten teller's modules
                 return Object.values(allMenuItems.teller);
             case 'loan_officer':
-                return [allMenuItems.loan_officer];
+                return  Object.values(allMenuItems.loan_officer);
             default:
                 return [];
         }

@@ -9,7 +9,7 @@ const incidentSchema = z.object({
     description: z.string().min(1, 'Description is required'),
     incident_category: z.string().min(1, 'Category is required'),
     priority: z.enum(['low', 'medium', 'high', 'critical'], { message: 'Invalid priority' }),
-    impact_level: z.enum(['low', 'medium', 'high']),
+    // impact_level: z.enum(['low', 'medium', 'high']),
     resolution_notes: z.string().optional(),
 });
 
@@ -50,6 +50,38 @@ function IncidentPage() {
     {error && <div className="text-red-600 mb-4">{error}</div>}
 
     <form onSubmit={handleSubmit(onSubmit)}>
+
+    <div className="mb-4">
+  <label htmlFor="incident_category" className="block font-medium">
+    Incident Category
+  </label>
+  <select
+    id="incident_category"
+    {...register("incident_category", { required: "Incident category is required" })}
+    className="w-full p-2 border rounded"
+    defaultValue=""
+  >
+    <option value="" disabled>Select an incident category</option>
+    <option value="System Downtime">
+      System Downtime 
+    </option>
+    <option value="Security Breach">
+      Security Breach 
+    </option>
+    <option value="Hardware Malfunction">
+      Hardware Malfunction 
+    </option>
+    <option value="Customer Dispute">
+      Customer Dispute 
+    </option>
+    <option value="Facility Maintenance Issue">
+      Facility Maintenance Issue 
+    </option>
+  </select>
+  {errors.incident_category && (
+    <p className="text-red-500">{errors.incident_category.message}</p>
+  )}
+</div>
         {/* <div className="mb-4">
             <label htmlFor="title" className="block font-medium">Title</label>
             <input
@@ -82,18 +114,11 @@ function IncidentPage() {
                 </select>
                 {errors.priority && <p className="text-red-500">{errors.priority.message}</p>}
             </div>
-        <div className="mb-4">
-            <label htmlFor="incident_category" className="block font-medium">Incident Category</label>
-            <input
-                id="incident_category"
-                type="text"
-                className="w-full p-2 border rounded"
-                {...register('incident_category')}
-            />
-            {errors.incident_category && <p className="text-red-500">{errors.incident_category.message}</p>}
-        </div>
 
-        <div className="mb-4">
+       
+
+
+        {/* <div className="mb-4">
             <label htmlFor="impact_level" className="block font-medium">Impact Level</label>
             <select
                 id="impact_level"
@@ -105,7 +130,7 @@ function IncidentPage() {
                 <option value="high">High</option>
             </select>
             {errors.impact_level && <p className="text-red-500">{errors.impact_level.message}</p>}
-        </div>
+        </div> */}
 
         <div className="mb-4">
             <label htmlFor="resolution_notes" className="block font-medium">Resolution Notes</label>
@@ -119,7 +144,7 @@ function IncidentPage() {
         <div className="mt-6 flex justify-between">
             <button
                 type="submit"
-                className="bg-blue-500 text-white p-2 rounded"
+                className="bg-gray-500 text-white p-2 rounded"
                 disabled={isSubmitting}
             >
                 {isSubmitting ? 'Submitting...' : 'Submit Ticket'}

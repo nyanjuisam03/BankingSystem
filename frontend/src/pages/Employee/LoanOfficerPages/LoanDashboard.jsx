@@ -32,7 +32,7 @@ function LoanDashboard() {
     chart: {
       type: 'bar',
       height: 350,
-      width: '100%',
+      width: '90%',
       toolbar: {
         show: true
       }

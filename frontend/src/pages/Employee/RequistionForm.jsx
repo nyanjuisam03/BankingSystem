@@ -10,7 +10,7 @@ const requisitionSchema = z.object({
     priority: z.enum(['low', 'medium', 'high', 'critical'], { message: 'Invalid priority' }),
     request_type: z.string().min(3, 'Request type is required'),
     requested_items: z.string().min(3, 'At least one item is required'),
-    estimated_cost: z.coerce.number().positive('Cost must be a positive number'),
+    
 });
 
 function RequistionForm() {
@@ -49,6 +49,30 @@ function RequistionForm() {
        <form onSubmit={handleSubmit(onSubmit)} className="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-lg">
             <h2 className="text-xl font-bold mb-4">Requisition Ticket</h2>
 
+
+            <div className="mb-3">
+  <label className="block font-medium">Request Type</label>
+  <select
+    {...register('request_type')}
+    className="w-full border p-2 rounded"
+    defaultValue=""
+  >
+    <option value="" disabled>Select a request type</option>
+    <option value="Cash Replenishment Requisition">
+      Cash Replenishment Requisition 
+    </option>
+    <option value="Stationery & Office Supplies Requisition">
+      Stationery & Office Supplies Requisition 
+    </option>
+   
+    <option value="Security & Surveillance Requisition">
+      Security & Surveillance Requisition 
+    </option>
+  </select>
+  {errors.request_type && <p className="text-red-500">{errors.request_type.message}</p>}
+           </div>
+
+
             {/* <div className="mb-3">
                 <label className="block font-medium">Title</label>
                 <input
@@ -79,15 +103,8 @@ function RequistionForm() {
                 {errors.priority && <p className="text-red-500">{errors.priority.message}</p>}
             </div>
 
-            <div className="mb-3">
-                <label className="block font-medium">Request Type</label>
-                <input
-                    type="text"
-                    {...register('request_type')}
-                    className="w-full border p-2 rounded"
-                />
-                {errors.request_type && <p className="text-red-500">{errors.request_type.message}</p>}
-            </div>
+          
+
 
             <div className="mb-3">
                 <label className="block font-medium">Requested Items</label>
@@ -99,7 +116,7 @@ function RequistionForm() {
                 {errors.requested_items && <p className="text-red-500">{errors.requested_items.message}</p>}
             </div>
 
-            <div className="mb-3">
+            {/* <div className="mb-3">
                 <label className="block font-medium">Estimated Cost</label>
                 <input
                     type="number"
@@ -107,11 +124,11 @@ function RequistionForm() {
                     className="w-full border p-2 rounded"
                 />
                 {errors.estimated_cost && <p className="text-red-500">{errors.estimated_cost.message}</p>}
-            </div>
+            </div> */}
 
             <button
                 type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
                 disabled={isSubmitting}
             >
                 {isSubmitting ? 'Submitting...' : 'Submit Request'}

@@ -1,15 +1,15 @@
 const db = require('../config/database');
 
 exports.createTicket = (req, res) => {
-    const { ticket_id, ticket_type,  description, status, priority, created_by, request_type, requested_items, estimated_cost, incident_category, impact_level, resolution_notes } = req.body;
+    const { ticket_id, ticket_type,  description, status, priority, created_by, request_type, requested_items,  incident_category,  resolution_notes } = req.body;
 
     const query = `
         INSERT INTO management_tickets ( ticket_type,  description, status, priority, created_by, 
-                                        request_type, requested_items, estimated_cost, incident_category, impact_level, resolution_notes) 
-        VALUES ( ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                        request_type, requested_items, incident_category, resolution_notes) 
+        VALUES ( ?,  ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(query, [ticket_type,  description, status, priority, created_by, request_type, requested_items, estimated_cost, incident_category, impact_level, resolution_notes], (err, results) => {
+    db.query(query, [ticket_type,  description, status, priority, created_by, request_type, requested_items,  incident_category, resolution_notes], (err, results) => {
         if (err) {
             return res.status(500).json({
                 message: 'Error creating ticket',
