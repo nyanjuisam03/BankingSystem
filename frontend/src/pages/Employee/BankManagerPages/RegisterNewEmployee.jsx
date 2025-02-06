@@ -10,10 +10,10 @@ function RegisterNewEmployee() {
         firstName: '',
         lastName: '',
         role: '',
-        isTeller: false,
-        tellerCode: '',
-        department: '',
-        windowNumber: ''
+        // isTeller: false,
+        // tellerCode: '',
+        // department: '',
+        // windowNumber: ''
     });
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +45,7 @@ function RegisterNewEmployee() {
         setIsLoading(false);
     };
   return (
-    <div className="max-w-md mx-auto p-4 border rounded-lg shadow-md bg-white">
+    <div className="max-w-7xl mx-auto p-4 border rounded-lg shadow-md bg-white">
     <h2 className="text-xl font-bold mb-4">Register New Employee</h2>
     {error && <p className="text-red-500 mb-2">{error}</p>}
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,8 +59,10 @@ function RegisterNewEmployee() {
             <option value="admin">Admin</option>
             <option value="bank_manager">Manager</option>
             <option value="loan_officer">Loan Ofiicer</option>
+            <option value="teller">Teller</option>
+            <option value="supplier">Supplier</option>
         </select>
-        <label className="flex items-center space-x-2">
+        {/* <label className="flex items-center space-x-2">
             <input type="checkbox" name="isTeller" checked={formData.isTeller} onChange={handleChange} />
             <span>Is Teller?</span>
         </label>
@@ -70,7 +72,7 @@ function RegisterNewEmployee() {
                 <input type="text" name="department" value={formData.department} onChange={handleChange} placeholder="Department" required className="w-full p-2 border rounded" />
                 <input type="text" name="windowNumber" value={formData.windowNumber} onChange={handleChange} placeholder="Window Number (Optional)" className="w-full p-2 border rounded" />
             </>
-        )}
+        )} */}
         <button type="submit" disabled={isLoading} className="w-full bg-blue-500 text-white p-2 rounded">
             {isLoading ? 'Registering...' : 'Register'}
         </button>

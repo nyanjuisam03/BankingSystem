@@ -39,6 +39,9 @@ import LoanDetailsPage from './pages/customer/LoanDetailsPage'
 import RequistionForm from "./pages/Employee/RequistionForm"
 import IncidentPage from './pages/Employee/IncidentPage'
 import LoanTickets from './pages/Employee/LoanOfficerPages/LoanTickets'
+import CustomersAccount from './pages/Employee/BankManagerPages/CustomersAccount'
+import AllLoans from './pages/Employee/BankManagerPages/AllLoans'
+import AssignIcidents from './pages/Employee/BankManagerPages/AssignIcidents'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -109,7 +112,11 @@ function App() {
          <Route path='performance' element={<PerformanceMonitorin/>}/>
          <Route path='operations' element={<BranchOperation/>}/>
          <Route path='employees/:employeeId/change-role' element={<ChangeRoles />} />
-         <Route path='register-employees' element={<RegisterNewEmployee/>}/>
+         <Route path='register' element={<RegisterNewEmployee/>}/>
+         <Route path='transactions' element={<VirtualTransaction/>}/>
+         <Route path='accounts' element={<CustomersAccount/>}/>
+         <Route path='loans' element={<AllLoans/>}/>
+         <Route path='incident' element={<AssignIcidents/>}/>
       </Route>
 
 

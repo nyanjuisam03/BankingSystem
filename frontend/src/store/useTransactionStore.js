@@ -11,6 +11,8 @@ const useTransactionStore = create((set, get) => ({
     transactions: [],  // Object to store transactions by account ID
     isLoading: false,
     error: null,
+    depositTotal: 0,
+    withdrawalTotal: 0,
 
     
     // Fetch transactions for a specific account
@@ -132,6 +134,78 @@ const useTransactionStore = create((set, get) => ({
             });
         }
     },
+
+
+    fetchDepositTotal: async () => {
+        set({ isLoading: true, error: null });
+
+        try {
+            const response = await api.get('/transactions/all-transactions');
+            
+            // Add console.log to debug the response
+            console.log('API Response:', response.data);
+            
+            // Make sure we're accessing the correct data structure
+            const transactions = response.data.data || [];
+            
+            // Add console.log to debug the filtered transactions
+            console.log('Filtered Transactions:', transactions.filter(tx => tx.type === 'deposit'));
+
+            const totalDeposits = transactions
+                .filter(tx => tx.type === 'deposit')
+                .reduce((sum, tx) => sum + Number(tx.amount), 0); // Convert to number explicitly
+            
+            // Add console.log to debug the total
+            console.log('Calculated Total:', totalDeposits);
+
+            set({ 
+                depositTotal: totalDeposits || 0, // Provide fallback value
+                isLoading: false 
+            });
+        } catch (error) {
+            console.error('Error fetching deposits:', error);
+            set({
+                error: error.response?.data?.message || "Failed to fetch deposit totals",
+                isLoading: false,
+                depositTotal: 0 // Reset to 0 on error
+            });
+        }
+    },
+
+    fetchWithdrawalTotal: async () => {
+        set({ isLoading: true, error: null });
+
+        try {
+            const response = await api.get('/transactions/all-transactions');
+            
+            // Debug logs
+            console.log('API Response:', response.data);
+            
+            const transactions = response.data.data || [];
+            
+            console.log('Filtered Withdrawals:', transactions.filter(tx => tx.type === 'withdrawal'));
+
+            const totalWithdrawals = transactions
+                .filter(tx => tx.type === 'withdrawal')
+                .reduce((sum, tx) => sum + Number(tx.amount), 0);
+            
+            console.log('Calculated Withdrawal Total:', totalWithdrawals);
+
+            set({ 
+                withdrawalTotal: totalWithdrawals || 0,
+                isLoading: false 
+            });
+        } catch (error) {
+            console.error('Error fetching withdrawals:', error);
+            set({
+                error: error.response?.data?.message || "Failed to fetch withdrawal totals",
+                isLoading: false,
+                withdrawalTotal: 0
+            });
+        }
+    },
+
+
     // Clear errors
     clearError: () => set({ error: null }),
 

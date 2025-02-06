@@ -13,6 +13,7 @@ const accountStore = create((set) => ({
     isLoading: false,
     error: null,
     account: null,
+    approvedAccountsTotal: 0,
 
     // Fetch all accounts for a user
     fetchAccounts: async (userId) => {
@@ -83,6 +84,35 @@ const accountStore = create((set) => ({
                 isLoading: false 
             });
             throw error;
+        }
+    },
+
+
+    fetchApprovedAccountsTotal: async () => {
+        set({ isLoading: true, error: null });
+    
+        try {
+            const response = await api.get('accounts/get-accounts');
+            
+            console.log('API Response:', response.data);
+            
+            const accounts = response.data || [];
+            
+            const approvedAccountsTotal = accounts.filter(account => account.status === 'approved').length;
+            
+            console.log('Total Approved Accounts:', approvedAccountsTotal);
+    
+            set({ 
+                approvedAccountsTotal, 
+                isLoading: false 
+            });
+        } catch (error) {
+            console.error('Error fetching approved accounts:', error);
+            set({
+                error: error.response?.data?.message || "Failed to fetch approved accounts total",
+                isLoading: false,
+                approvedAccountsTotal: 0
+            });
         }
     },
 

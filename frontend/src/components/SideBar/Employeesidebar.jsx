@@ -49,27 +49,88 @@ function Employeesidebar({ userRole }) {
             ],
         },
         bank_manager: {
-            title: 'Bank Manager',
-            icon: <BsBank2 size={20} />,
-            submenu: [
-                {
-                    title: 'Dashboard',
-                    path: '/employee/bank-manager/manager-dashboard',
-                },
-                {
-                    title: 'Employee Management',
-                    path: '/employee/bank-manager/employees',
-                },
-                {
-                    title: 'Branch Operations',
-                    path: '/employee/bank-manager/operations',
-                },
-                {
-                    title: 'Performance Monitoring',
-                    path: '/employee/bank-manager/performance',
-                },
-                
-            ],
+            dashboard: {
+                title: 'Dashboard',
+                icon: <BsBank2 size={20} />,
+                submenu: [
+                    {
+                        title: 'Dashboard Home',
+                        path: '/employee/bank-manager/manager-dashboard',
+                    },
+                ],
+            },
+            employeeManagement: {
+                title: 'Employee Management',
+                icon: <BsBank2 size={20} />,
+                submenu: [
+                    {
+                        title: 'Employee List',
+                        path: '/employee/bank-manager/employees',
+                    },
+                    {
+                        title: 'Performance Reviews',
+                        path: '/employee/bank-manager/performance',
+                    },
+                   {
+                    title:'Register New Employees',
+                    path:'/employee/bank-manager/register'
+                   }
+                ],
+            },
+            transactionFunds: {
+                title: 'Transaction and Fund Management',
+                icon: <BsBank2 size={20} />,
+                submenu: [
+                    {
+                        title: 'View Customer Accounts',
+                        path: '/employee/bank-manager/accounts',
+                    },
+                    {
+                        title: 'Monitor Customer Transactions',
+                        path: '/employee/bank-manager/transactions',
+                    },
+                    // {
+                    //     title: 'Resource Management',
+                    //     path: '/employee/bank-manager/resources',
+                    // },
+                ],
+            },
+            loanCredit: {
+                title: 'Loan and Credit Management',
+                icon: <BsBank2 size={20} />,
+                submenu: [
+                    {
+                        title: 'Loans Overview',
+                        path: '/employee/bank-manager/loans',
+                    },
+                    // {
+                    //     title: 'KPI Dashboard',
+                    //     path: '/employee/bank-manager/kpi',
+                    // },
+                    // {
+                    //     title: 'Analytics',
+                    //     path: '/employee/bank-manager/analytics',
+                    // },
+                ],
+            },
+            incidentTickets: {
+                title: 'Incident Assignment',
+                icon: <BsBank2 size={20} />,
+                submenu: [
+                    {
+                        title: 'Assign Incidents',
+                        path: '/employee/bank-manager/incident',
+                    },
+                    // {
+                    //     title: 'KPI Dashboard',
+                    //     path: '/employee/bank-manager/kpi',
+                    // },
+                    // {
+                    //     title: 'Analytics',
+                    //     path: '/employee/bank-manager/analytics',
+                    // },
+                ],
+            },
         },
         teller: {
             dashboard: {
@@ -217,7 +278,7 @@ function Employeesidebar({ userRole }) {
             case 'admin':
                 return [allMenuItems.admin];
             case 'bank_manager':
-                return [allMenuItems.bank_manager];
+                return Object.values(allMenuItems.bank_manager);
             case 'teller':
                 // Flatten teller's modules
                 return Object.values(allMenuItems.teller);

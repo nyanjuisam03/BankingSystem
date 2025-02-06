@@ -27,7 +27,7 @@ const useServiceTicket=create((set,get)=>({
     },
 
 
-    updateTicketStatus: async (ticketId, newStatus) => {
+    updateTicketStatus: async (ticketId, newStatus,assignedTechnician = 'John Doe') => {
         try {
             await api.put(`/management/service-tickets/${ticketId}/status`, { status: newStatus });
             set((state) => ({

@@ -12,14 +12,14 @@ function EmployeeManagement() {
   };
   return (
     <div className=" grid grid-cols-1">
-    <h1 className="text-2xl font-bold mb-6">Bank Employees</h1>
+    
     <EmployeeTable />
-    <EmployeePerformancTable/>
+{/*     
     <Card
         title="Register Employees"
         description="Add new employees to the banking system"
         onClick={() => handleNavigate('/register-employees')}
-      />
+      /> */}
 </div>
   )
 }

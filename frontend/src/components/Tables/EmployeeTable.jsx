@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useEmployeeStore from '../../store/employeeStore';
 
@@ -9,22 +9,18 @@ const EmployeeTable = () => {
         isLoading, 
         error, 
         fetchAllEmployees,
-        filterByRole,
-        selectedRole 
+        filterByRole
     } = useEmployeeStore();
+
+    const [selectedRole, setSelectedRole] = useState('All');
 
     useEffect(() => {
         fetchAllEmployees();
     }, [fetchAllEmployees]);
 
-    const roles = [
-        { id: 'all', name: 'All Roles' },
-        { id: '1', name: 'admin' },
-        { id: '2', name: 'Bank Manager' },
-        { id: '3', name: 'Teller' },
-        { id: '4', name: 'Loan Officer' },
-        { id: '5', name: 'Customer' }
-    ];
+    useEffect(() => {
+        filterByRole(selectedRole);
+    }, [selectedRole, filterByRole]);
 
     const getRoleName = (roleId) => {
         const roleNames = {
@@ -32,7 +28,7 @@ const EmployeeTable = () => {
             2: 'Bank Manager',
             3: 'Teller',
             4: 'Loan Officer',
-            5: 'Customer'
+           
         };
         return roleNames[roleId] || 'Unknown Role';
     };
@@ -43,7 +39,7 @@ const EmployeeTable = () => {
             2: 'bg-purple-100 text-purple-800',
             3: 'bg-green-100 text-green-800',
             4: 'bg-blue-100 text-blue-800',
-            5: 'bg-gray-100 text-gray-800'
+           
         };
         return colors[roleId] || 'bg-gray-100 text-gray-800';
     };
@@ -71,20 +67,18 @@ const EmployeeTable = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                     Filter by Role
                 </label>
-                <div className="flex flex-wrap gap-2">
-                    {roles.map((role) => (
-                        <button
-                            key={role.id}
-                            onClick={() => filterByRole(role.id)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors
-                                ${selectedRole === role.id 
-                                    ? 'bg-blue-600 text-white' 
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                        >
-                            {role.name}
-                        </button>
-                    ))}
-                </div>
+                <select 
+                    value={selectedRole}
+                    onChange={(e) => setSelectedRole(e.target.value)}
+                    className="px-3 py-2 border rounded-md w-full"
+                >
+                    <option value="All">All Roles</option>
+                    <option value="1">Admin</option>
+                    <option value="2">Bank Manager</option>
+                    <option value="3">Teller</option>
+                    <option value="4">Loan Officer</option>
+                    
+                </select>
             </div>
 
             {/* Employee Table */}
@@ -116,7 +110,7 @@ const EmployeeTable = () => {
                         {filteredEmployees.map((employee) => (
                             <tr key={employee.id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {employee.user_id}
+                                    {employee.id}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm font-medium text-gray-900">
@@ -127,8 +121,7 @@ const EmployeeTable = () => {
                                     {employee.email}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full
-                                        ${getRoleColor(employee.role_id)}`}>
+                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(employee.role_id)}`}>
                                         {getRoleName(employee.role_id)}
                                     </span>
                                 </td>

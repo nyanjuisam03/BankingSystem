@@ -1,13 +1,49 @@
 import React, { useEffect, useRef } from 'react';
 import ApexCharts from 'apexcharts';
 import MetricCard from '../../../components/Cards/MetricCard';
+import useTransactionStore from '../../../store/useTransactionStore';
+import useLoanStore from '../../../store/loanStore';
+import accountStore from '../../../store/accountStore';
 
 
 function ManagerDashboard() {
 
+  const { depositTotal, isLoading, error, fetchDepositTotal ,withdrawalTotal, isLoading: withdrawalLoading, error: withdrawalError, fetchWithdrawalTotal } = useTransactionStore();
+  
+  const { 
+    approvedLoansTotal, 
+    isLoading: loansLoading, 
+    error: loansError, 
+    fetchApprovedLoansTotal 
+} = useLoanStore();
+
+const { 
+  approvedAccountsTotal,  
+  fetchApprovedAccountsTotal 
+} = accountStore();
+
   const pieChartRef = useRef(null);
   const barChartRef = useRef(null);
 
+  useEffect(() => {
+    fetchDepositTotal();
+  }, []);
+
+
+  useEffect(() => {
+    fetchWithdrawalTotal();
+}, []);
+
+useEffect(() => {
+  fetchApprovedAccountsTotal();
+}, []);
+
+useEffect(() => {
+  fetchApprovedLoansTotal();
+}, []);
+
+  console.log(depositTotal)
+ 
   // Dummy data generation
   const generateData = () => {
     return {
@@ -31,11 +67,13 @@ function ManagerDashboard() {
 
   // Format currency
   const formatCurrency = (amount) => {
+    // Add a check for NaN or undefined
+    const validAmount = Number(amount) || 0;
     return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'KSH'
-    }).format(amount);
-  };
+        style: 'currency',
+        currency: 'KSH'
+    }).format(validAmount);
+};
 
   // Pie Chart Options
   const pieChartOptions = {
@@ -122,7 +160,6 @@ function ManagerDashboard() {
       pieChart.render();
       barChart.render();
 
-      // Cleanup
       return () => {
         pieChart.destroy();
         barChart.destroy();
@@ -130,34 +167,38 @@ function ManagerDashboard() {
     }
   }, []);
 
+
   return (
     <div className="p-6">
-    {/* Metric Cards */}
-    <div className="grid grid-cols-3 gap-4 mb-6">
-      <MetricCard 
-        title="Total Deposits"
-        value={formatCurrency(data.deposits)}
-      />
-      <MetricCard 
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        <MetricCard 
+          title="Total Deposits"
+          value={formatCurrency(depositTotal)}
+        />
+        <MetricCard 
         title="Total Withdrawals"
-        value={formatCurrency(data.withdrawals)}
-      />
-      <MetricCard 
-        title="Loan Disbursements"
-        value={formatCurrency(data.loanDisbursements)}
-      />
-    </div>
+        value={formatCurrency(withdrawalTotal || 0)}
+    />
+          <MetricCard 
+                    title="Total Approved Loans"
+                    value={formatCurrency(approvedLoansTotal || 0)}
+                />
 
-    {/* Charts */}
-    <div className="grid grid-cols-2 gap-6">
-      <div className="bg-white rounded-lg shadow p-4">
-        <div ref={pieChartRef}></div>
+<MetricCard 
+            title="Total Approved Accounts"
+            value={approvedAccountsTotal || 0}
+        />
       </div>
-      <div className="bg-white rounded-lg shadow p-4">
-        <div ref={barChartRef}></div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <div className="bg-white rounded-lg shadow p-4">
+          <div ref={pieChartRef}></div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div ref={barChartRef}></div>
+        </div>
       </div>
     </div>
-  </div>
   )
 }
 

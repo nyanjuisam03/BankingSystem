@@ -54,11 +54,11 @@ const useEmployeeStore = create((set, get) => ({
     filterByRole: (roleId) => {
         const { employees } = get();
         set({ selectedRole: roleId });
-        
-        if (roleId === 'all') {
+    
+        if (!roleId || roleId === 'All') { // Handle both 'All' and null
             set({ filteredEmployees: employees });
         } else {
-            const filtered = employees.filter(employee => employee.role_id === roleId);
+            const filtered = employees.filter(employee => String(employee.role_id) === String(roleId)); // Ensure type match
             set({ filteredEmployees: filtered });
         }
     },

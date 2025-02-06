@@ -31,6 +31,8 @@ const useLoanStore = create((set, get) => ({
   loading: false,
   error: null,
   successMessage: null,
+  approvedLoansTotal: 0,
+  isLoading: false,
 
   // Create new loan
   createLoan: async (loanData) => {
@@ -303,6 +305,40 @@ const useLoanStore = create((set, get) => ({
         });
     }
 },
+
+
+fetchApprovedLoansTotal: async () => {
+  set({ isLoading: true, error: null });
+
+  try {
+      const response = await api.get('/loans/all-loans');
+      
+      console.log('API Response:', response.data);
+      
+      const loans = response.data.loans || [];
+      
+      console.log('Filtered Approved Loans:', loans.filter(loan => loan.status === 'approved'));
+
+      const totalApprovedLoans = loans
+          .filter(loan => loan.status === 'approved')
+          .reduce((sum, loan) => sum + Number(loan.amount), 0);
+      
+      console.log('Calculated Approved Loans Total:', totalApprovedLoans);
+
+      set({ 
+          approvedLoansTotal: totalApprovedLoans || 0,
+          isLoading: false 
+      });
+  } catch (error) {
+      console.error('Error fetching approved loans:', error);
+      set({
+          error: error.response?.data?.message || "Failed to fetch approved loans total",
+          isLoading: false,
+          approvedLoansTotal: 0
+      });
+  }
+},
+
   // Utility functions
   clearError: () => set({ error: null }),
   clearSuccessMessage: () => set({ successMessage: null }),
