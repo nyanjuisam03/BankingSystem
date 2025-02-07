@@ -43,6 +43,21 @@ const useServiceTicket=create((set,get)=>({
     },
 
 
+    updateServiceTicketStatus: async (ticketId, newStatus) => {
+        try {
+            await api.put(`/management/service-tickets/${ticketId}/status`, { status: newStatus });
+            set((state) => ({
+                tickets: state.tickets.map((ticket) =>
+                    ticket.ticket_id === ticketId ? { ...ticket, status: newStatus } : ticket
+                ),
+            }));
+            return { success: true };
+        } catch (error) {
+            console.error('Error updating ticket status:', error);
+            return { success: false, error: error.response?.data?.message || 'Failed to update ticket status' };
+        }
+    },
+
     fetchAllTickets: async () => {
         set({ isLoading: true, error: null });
         try {

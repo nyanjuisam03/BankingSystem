@@ -270,6 +270,42 @@ function Employeesidebar({ userRole }) {
     ],
   },
 },
+supplier: {
+    dashboard: {
+        title: 'Dashboard',
+        icon: <HiOutlineUserGroup size={20} />,
+        submenu: [
+            {
+                title: 'Dashboard Home',
+                path: '/employee/supplier/dashboard',
+            },
+        ],
+    },
+    requisitionRequest: {
+        title: 'Requisition Request',
+        icon: <HiOutlineUserGroup size={20} />,
+        submenu: [
+            {
+                title: 'New Request',
+                path: '/employee/supplier/requisition',
+            },
+            
+        ],
+    },
+    helpdeskServices: {
+        title: 'Helpdesk Services',
+        icon: <HiOutlineUserGroup size={20} />,
+        submenu: [
+            {
+                title: 'Repoert Incident',
+                path: '/employee/supplier/incident',
+            },
+           
+            
+           
+        ],
+    },
+},
     };
 
     const getMenuItemsByRole = (userRole) => {
@@ -284,6 +320,8 @@ function Employeesidebar({ userRole }) {
                 return Object.values(allMenuItems.teller);
             case 'loan_officer':
                 return  Object.values(allMenuItems.loan_officer);
+                case 'supplier':
+                    return Object.values(allMenuItems.supplier)
             default:
                 return [];
         }

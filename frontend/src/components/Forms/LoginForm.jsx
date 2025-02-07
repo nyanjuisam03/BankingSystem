@@ -45,6 +45,9 @@ function LoginForm() {
       case 'bank_manager':
         navigate('/employee/bank-manager');
         break;
+        case 'supplier':
+        navigate("/employee/supplier");
+        break
       default:
         navigate('/unauthorized');
     }

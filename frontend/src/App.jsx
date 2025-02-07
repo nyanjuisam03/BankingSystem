@@ -42,6 +42,8 @@ import LoanTickets from './pages/Employee/LoanOfficerPages/LoanTickets'
 import CustomersAccount from './pages/Employee/BankManagerPages/CustomersAccount'
 import AllLoans from './pages/Employee/BankManagerPages/AllLoans'
 import AssignIcidents from './pages/Employee/BankManagerPages/AssignIcidents'
+import RequistionSupplier from './pages/Employee/SupplierPages/RequistionSupplier'
+import SupplierDashboard from './pages/Employee/SupplierPages/SupplierDashboard'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -117,6 +119,13 @@ function App() {
          <Route path='accounts' element={<CustomersAccount/>}/>
          <Route path='loans' element={<AllLoans/>}/>
          <Route path='incident' element={<AssignIcidents/>}/>
+      </Route>
+
+      <Route path='supplier'>
+        <Route path='dashboard'  element={<SupplierDashboard/>}/>
+        <Route path='requisition' element={<RequistionSupplier/>}/>
+        <Route path='incident' element={<IncidentPage/>}/>
+
       </Route>
 
 
