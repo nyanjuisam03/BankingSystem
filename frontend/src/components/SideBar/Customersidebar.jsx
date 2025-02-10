@@ -5,11 +5,14 @@ import { BiTransfer, BiHistory } from 'react-icons/bi';
 import { BsBank2 } from 'react-icons/bs';
 import { AiOutlineFileText } from 'react-icons/ai';
 import { LuTickets } from "react-icons/lu";
+import useUserStore from '../../store/usersStore';
 
 function Customersidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState({});
   const sidebarRef = useRef(null);
+  const user = useUserStore((state) => state.user);
+    const userId = user?.id || "unauthorized"
 
   const toggleSubmenu = (index) => {
     setOpenSubmenus((prev) => ({
@@ -82,16 +85,26 @@ function Customersidebar() {
         },
       ],
     },
-    {
-      title: 'Account Statements',
-      icon: <AiOutlineFileText size={20} />,
-      path: '/customer/statements',
-      permission: 'download_account_statement',
-    },
+    // {
+    //   title: 'Account Statements',
+    //   icon: <AiOutlineFileText size={20} />,
+    //   path: '/customer/statements',
+    //   permission: 'download_account_statement',
+    // },
     {
       title:"Booking Ticket",
       icon:<LuTickets  size={20}/>,
-      path:'/customer/booking-ticket'
+      path:'booking-ticket',
+      submenu:[
+        {
+          title:"Booking Ticket",
+          path:'/customer/booking-ticket/booking-tickets'
+        },
+        {
+          title:"Ticket Status",
+          path:`/customer/booking-ticket/ticket-status/${userId}`
+        }
+      ]
     }
   ];
 

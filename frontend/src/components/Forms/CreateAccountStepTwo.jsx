@@ -2,15 +2,19 @@ import React, {useState, useEffect } from 'react';
 import useUserStore from '../../store/usersStore';
 import accountStore from '../../store/accountStore'
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+
 
 function CreateAccountStepTwo({ onBack }) {
     const navigate = useNavigate();
     const { openAccount, isLoading, error } = accountStore();
     const user = useUserStore((state) => state.user);
+    const { enqueueSnackbar } = useSnackbar();
     
     const [formData, setFormData] = useState({
       account_type: '',
       intial_deposit: 0,
+      deposit_option:'',
       employer_name: '',
       employer_address: '',
       employer_phone: '',
@@ -55,19 +59,31 @@ function CreateAccountStepTwo({ onBack }) {
       };
   
       const selectedType = accountTypes[formData.account_type];
-      if (parseFloat(formData.intial_deposit) < selectedType.minBalance) {
-        alert(`Minimum deposit for ${selectedType.name} account is Ksh${selectedType.minBalance}`);
-        return;
-      }
+      enqueueSnackbar(`Minimum deposit for ${selectedType.name} account is Ksh${selectedType.minBalance}`, {
+        variant: 'error',
+        autoHideDuration: 3000
+      });
   
       try {
         await openAccount({
           account_type: parseInt(formData.account_type),
           intial_deposit: parseFloat(formData.intial_deposit)
         });
-        navigate('/customer');
+
+        enqueueSnackbar('Account was created successfully', {
+          variant: 'success',
+          autoHideDuration: 3000
+        });
+
+          setTimeout(() => {
+          navigate('/customer');
+        }, 1000);
+
       } catch (error) {
-        console.error('Failed to create account:', error);
+        enqueueSnackbar(err.message || 'Failed to create account', {
+          variant: 'error',
+          autoHideDuration: 4000
+        });
       }
     };
   
@@ -117,6 +133,19 @@ function CreateAccountStepTwo({ onBack }) {
           ))}
         </select>
       </div>
+
+     <div>
+     <label className="block text-gray-700 mb-2">Deposit Options</label>
+     <select
+       className="w-full p-2 border rounded"
+      value={formData.deposit_option}
+      onChange={(e)=>setFormData({...formData,deposit_option:e.target.value})}
+      >
+  <option value="" disabled>Select an option</option>
+        <option value="bank-transfer">Bank Transfer</option>
+        <option value="mobile-money">Mobile Money (M-PESA, Airtel Money)</option>
+     </select>
+     </div>
 
       <div>
         <label className="block text-gray-700 mb-2">Initial Deposit</label>

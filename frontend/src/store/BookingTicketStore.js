@@ -17,11 +17,48 @@ const useTicketStore = create((set, get) => ({
     error: null,
 
     // Fetch tickets for a specific user
-    fetchUserTickets: async (userId) => {
-        if (!userId) {
-            console.error('No user ID provided');
-            return;
+    
+
+    // Helper method to log current state
+    logCurrentState: () => {
+        const state = get();
+        console.log('Current Ticket Store State:', {
+            tickets: state.tickets,
+            isLoading: state.isLoading,
+            error: state.error
+        });
+    },
+
+    fetchTickets: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await api.get('/booking/all-bookingtickets');
+            
+            // Filter tickets for Registration Account Issues and PENDING status
+            const filteredTickets = response.data.data.filter(ticket => 
+                ticket.ticket_type === 'Registration Account Issues' && 
+                ticket.status === 'PENDING'
+            );
+            
+            set({
+                allTickets: filteredTickets, // Set only the filtered tickets
+                isLoading: false,
+            });
+            console.log('Filtered tickets fetched successfully:', filteredTickets);
+        } catch (error) {
+            console.error('Error fetching tickets:', error);
+            set({
+                error: error.response?.data?.message || 'Failed to fetch tickets',
+                isLoading: false,
+            });
         }
+    },
+
+    fetchUserTickets: async (userId) => {
+        // if (!userId) {
+        //     console.error('No user ID provided');
+        //     return;
+        // }
 
         set({ isLoading: true, error: null });
         try {
@@ -61,43 +98,6 @@ const useTicketStore = create((set, get) => ({
             });
         }
     },
-
-    // Helper method to log current state
-    logCurrentState: () => {
-        const state = get();
-        console.log('Current Ticket Store State:', {
-            tickets: state.tickets,
-            isLoading: state.isLoading,
-            error: state.error
-        });
-    },
-
-    fetchTickets: async () => {
-        set({ isLoading: true, error: null });
-        try {
-            const response = await api.get('/booking/all-bookingtickets');
-            
-            // Filter tickets for Registration Account Issues and PENDING status
-            const filteredTickets = response.data.data.filter(ticket => 
-                ticket.ticket_type === 'Registration Account Issues' && 
-                ticket.status === 'PENDING'
-            );
-            
-            set({
-                allTickets: filteredTickets, // Set only the filtered tickets
-                isLoading: false,
-            });
-            console.log('Filtered tickets fetched successfully:', filteredTickets);
-        } catch (error) {
-            console.error('Error fetching tickets:', error);
-            set({
-                error: error.response?.data?.message || 'Failed to fetch tickets',
-                isLoading: false,
-            });
-        }
-    },
-
-
 
     fetchLoanTickets: async () => {
         set({ isLoading: true, error: null });

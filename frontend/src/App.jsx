@@ -44,6 +44,7 @@ import AllLoans from './pages/Employee/BankManagerPages/AllLoans'
 import AssignIcidents from './pages/Employee/BankManagerPages/AssignIcidents'
 import RequistionSupplier from './pages/Employee/SupplierPages/RequistionSupplier'
 import SupplierDashboard from './pages/Employee/SupplierPages/SupplierDashboard'
+import TicketStatus from './pages/customer/TicketStatus'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -72,7 +73,11 @@ function App() {
             <Route path="loan-details/:loanId" element={<LoanDetailsPage />} />
           </Route>
           <Route path='statements' element={<AccountStatement/>}/>
-          <Route path='booking-ticket' element={<BookingTicket/>}/>
+          <Route path='booking-ticket'>
+            <Route path="booking-tickets"element={<BookingTicket/>}/>
+            <Route path='ticket-status/:userId' element={<TicketStatus/>}/>
+             
+            </Route>
        </Route>
 
        <Route path='/employee' element={<EmployeeHomepage/>}>
