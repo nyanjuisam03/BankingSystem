@@ -55,7 +55,7 @@ function Employeesidebar({ userRole }) {
         bank_manager: {
             dashboard: {
                 title: 'Dashboard',
-                icon: <BsBank2 size={20} />,
+                icon: <AiFillDashboard  size={20} />,
                 submenu: [
                     {
                         title: 'Dashboard Home',
@@ -65,7 +65,7 @@ function Employeesidebar({ userRole }) {
             },
             employeeManagement: {
                 title: 'Employee Management',
-                icon: <BsBank2 size={20} />,
+                icon: <HiOutlineUserGroup  size={20} />,
                 submenu: [
                     {
                         title: 'Employee List',
@@ -81,9 +81,25 @@ function Employeesidebar({ userRole }) {
                     }
                 ],
             },
-            transactionFunds: {
-                title: 'Transaction and Fund Management',
+            
+            assetsManagement:{
+                title: 'Asset Management',
                 icon: <BsBank2 size={20} />,
+                submenu: [
+                    {
+                        title: 'Assets',
+                        path: '/employee/bank-manager/assets',
+                    },
+                    {
+                        title: 'Consumables',
+                        path: '/employee/bank-manager/consumable',
+                    },
+                ],
+            },
+
+            transactionFunds: {
+                title: 'Transaction and Fund ',
+                icon: < FaRegMoneyBillAlt size={20} />,
                 submenu: [
                     {
                         title: 'View Customer Accounts',
@@ -95,9 +111,10 @@ function Employeesidebar({ userRole }) {
                     },
                 ],
             },
+
             loanCredit: {
                 title: 'Loan and Credit Management',
-                icon: <BsBank2 size={20} />,
+                icon: < FaRegMoneyBillAlt size={20} />,
                 submenu: [
                     {
                         title: 'Loans Overview',
@@ -105,9 +122,10 @@ function Employeesidebar({ userRole }) {
                     },
                 ],
             },
+
             incidentTickets: {
                 title: 'Incident Assignment',
-                icon: <BsBank2 size={20} />,
+                icon: < GrTransaction size={20} />,
                 submenu: [
                     {
                         title: 'Assign Incidents',
@@ -231,16 +249,16 @@ function Employeesidebar({ userRole }) {
             },
         },
         supplier: {
-            dashboard: {
-                title: 'Dashboard',
-                icon: <HiOutlineUserGroup size={20} />,
-                submenu: [
-                    {
-                        title: 'Dashboard Home',
-                        path: '/employee/supplier/dashboard',
-                    },
-                ],
-            },
+            // dashboard: {
+            //     title: 'Dashboard',
+            //     icon: <HiOutlineUserGroup size={20} />,
+            //     submenu: [
+            //         {
+            //             title: 'Dashboard Home',
+            //             path: '/employee/supplier/dashboard',
+            //         },
+            //     ],
+            // },
             requisitionRequest: {
                 title: 'Requisition Request',
                 icon: <HiOutlineUserGroup size={20} />,

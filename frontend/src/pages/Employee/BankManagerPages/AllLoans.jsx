@@ -1,13 +1,33 @@
-import React ,{useEffect}from 'react'
+import React, { useEffect, useState } from 'react'
 import useLoanStore from '../../../store/loanStore'
 
 function AllLoans() {
     const { loans, loading, error, fetchAllLoans } = useLoanStore();
+    const [currentPage, setCurrentPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     // Fetch loans when the component mounts
     useEffect(() => {
       fetchAllLoans();
     }, [fetchAllLoans]);
+  
+    // Pagination logic
+    const totalLoans = loans.length;
+    const startIndex = currentPage * rowsPerPage;
+    const endIndex = Math.min(startIndex + rowsPerPage, totalLoans);
+    const paginatedLoans = loans.slice(startIndex, endIndex);
+
+    const nextPage = () => {
+      if (endIndex < totalLoans) {
+        setCurrentPage((prev) => prev + 1);
+      }
+    };
+
+    const prevPage = () => {
+      if (currentPage > 0) {
+        setCurrentPage((prev) => prev - 1);
+      }
+    };
   
     if (loading) {
       return <div className="text-center py-4">Loading...</div>;
@@ -18,43 +38,42 @@ function AllLoans() {
     }
   
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">All Loans</h1>
+    <div className="p-4 bg-white shadow-md rounded-lg my-5">
+      <h2 className="text-lg font-semibold mb-2">All Loans</h2>
+
       {loans.length === 0 ? (
-        <div className="text-center text-gray-500">No loans available.</div>
+        <div className="text-center text-gray-500 py-4">No loans available.</div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300 shadow-md">
-            <thead className="bg-gray-100 border-b">
-              <tr>
-                <th className="px-4 py-2 border">Loan ID</th>
-                <th className="px-4 py-2 border">Loan Type</th>
-                <th className="px-4 py-2 border">Amount</th>
-                <th className="px-4 py-2 border">Purpose</th>
-                <th className="px-4 py-2 border">Status</th>
-                <th className="px-4 py-2 border">Application Date</th>
-                <th className="px-4 py-2 border">Employer</th>
-                <th className="px-4 py-2 border">Job Title</th>
-                <th className="px-4 py-2 border">Monthly Income</th>
-                <th className="px-4 py-2 border">Existing Loan Payment</th>
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-600 text-white">
+                <th className="p-2">Loan Type</th>
+                <th className="p-2">Amount</th>
+                <th className="p-2">Purpose</th>
+                <th className="p-2">Status</th>
+                <th className="p-2">Application Date</th>
+                <th className="p-2">Employer</th>
+                <th className="p-2">Job Title</th>
+                <th className="p-2">Monthly Income</th>
+                <th className="p-2">Existing Loan Payment</th>
               </tr>
             </thead>
             <tbody>
-              {loans.map((loan) => (
-                <tr key={loan.id} className="text-center border-b">
-                  <td className="px-4 py-2 border">{loan.id}</td>
-                  <td className="px-4 py-2 border">{loan.loan_type}</td>
-                  <td className="px-4 py-2 border">Ksh {loan.amount}</td>
-                  <td className="px-4 py-2 border">{loan.purpose}</td>
-                  <td className="px-4 py-2 border">{loan.status}</td>
-                  <td className="px-4 py-2 border">
+              {paginatedLoans.map((loan) => (
+                <tr key={loan.id} className="border-b border-gray-200 even:bg-gray-100">
+                  <td className="p-2">{loan.loan_type}</td>
+                  <td className="p-2">Ksh {loan.amount.toLocaleString()}</td>
+                  <td className="p-2">{loan.purpose}</td>
+                  <td className="p-2">{loan.status}</td>
+                  <td className="p-2">
                     {new Date(loan.application_date).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-2 border">{loan.employer_name}</td>
-                  <td className="px-4 py-2 border">{loan.job_title}</td>
-                  <td className="px-4 py-2 border">Ksh {loan.monthly_income}</td>
-                  <td className="px-4 py-2 border">
-                    Ksh {loan.existing_loans_monthly_payment}
+                  <td className="p-2">{loan.employer_name}</td>
+                  <td className="p-2">{loan.job_title}</td>
+                  <td className="p-2">Ksh {loan.monthly_income.toLocaleString()}</td>
+                  <td className="p-2">
+                    Ksh {loan.existing_loans_monthly_payment.toLocaleString()}
                   </td>
                 </tr>
               ))}
@@ -62,6 +81,48 @@ function AllLoans() {
           </table>
         </div>
       )}
+
+      {/* Pagination Controls */}
+      <div className="flex justify-between items-center mt-4 text-sm">
+        <div className="flex items-center">
+          <span className="mr-2">Rows per page:</span>
+          <select
+            value={rowsPerPage}
+            onChange={(e) => {
+              setRowsPerPage(parseInt(e.target.value));
+              setCurrentPage(0); // Reset to first page when changing rows per page
+            }}
+            className="border rounded-md p-1 text-sm"
+          >
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+          </select>
+        </div>
+        <span>
+          {startIndex + 1}-{endIndex} of {totalLoans}
+        </span>
+        <div>
+          <button
+            onClick={prevPage}
+            disabled={currentPage === 0}
+            className={`mr-2 px-3 py-1 rounded-md ${
+              currentPage === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-blue-600 text-white"
+            }`}
+          >
+            ← Previous
+          </button>
+          <button
+            onClick={nextPage}
+            disabled={endIndex >= totalLoans}
+            className={`px-3 py-1 rounded-md ${
+              endIndex >= totalLoans ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-blue-600 text-white"
+            }`}
+          >
+            Next →
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

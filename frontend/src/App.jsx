@@ -45,6 +45,12 @@ import AssignIcidents from './pages/Employee/BankManagerPages/AssignIcidents'
 import RequistionSupplier from './pages/Employee/SupplierPages/RequistionSupplier'
 import SupplierDashboard from './pages/Employee/SupplierPages/SupplierDashboard'
 import TicketStatus from './pages/customer/TicketStatus'
+import AllConsumables from './pages/Employee/BankManagerPages/AllConsuambles'
+import AllAssets from './pages/Employee/BankManagerPages/AllAssets'
+import ConsumableDetails from './pages/Employee/BankManagerPages/ConsuambleDetails'
+import AssetDetails from './pages/Employee/BankManagerPages/AssetsDetails'
+import AddAssets from './pages/Employee/BankManagerPages/AddAssets'
+import AddConsumable from './pages/Employee/BankManagerPages/AddCosumables'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -124,6 +130,12 @@ function App() {
          <Route path='accounts' element={<CustomersAccount/>}/>
          <Route path='loans' element={<AllLoans/>}/>
          <Route path='incident' element={<AssignIcidents/>}/>
+         <Route path='assets' element={<AllAssets/>}/>
+         <Route path='consumable' element={<AllConsumables/>}/>
+         <Route path='consumable/:consumableId' element={<ConsumableDetails/>}/>
+         <Route path='assets/:assetId' element={<AssetDetails/>}/>
+         <Route path='add-assets' element={<AddAssets/>}/>
+         <Route path='add-consumable' element={<AddConsumable/>}/>
       </Route>
 
       <Route path='supplier'>
