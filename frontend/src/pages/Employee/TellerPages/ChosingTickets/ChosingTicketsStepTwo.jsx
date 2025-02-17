@@ -1,14 +1,24 @@
 import React from 'react'
 import useTicketStore from '../../../../store/BookingTicketStore'
+import useNotificationStore from '../../../../store/notificationStore'
+
 
 
 
 function ChosingTicketsStepTwo({ ticket, onBack }) {
     const { confirmTicket, completeTicket, isLoading, error } = useTicketStore()
+    const { 
+      sendTicketStatusChangeNotification,
+      getConfirmedTickets,
+      loading,
+      notificationStatus,
+      confirmedTickets
+    } = useNotificationStore();
 
     const handleStatusUpdate = async (newStatus) => {
       try {
         if (newStatus === 'CONFIRMED') {
+          await sendTicketStatusChangeNotification();
           await confirmTicket(ticket.ticket_id) // Use confirmTicket for "CONFIRMED" status
         } else if (newStatus === 'COMPLETED') {
           await completeTicket(ticket.ticket_id) // Use completeTicket for "COMPLETED" status

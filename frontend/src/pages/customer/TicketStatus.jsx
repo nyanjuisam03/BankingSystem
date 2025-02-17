@@ -46,8 +46,8 @@ const TicketStatus = () => {
                             <th className="p-2">Status</th>
                             <th className="p-2">Appointment Date</th>
                             <th className="p-2">Appointment Time</th>
-                            <th className="p-2">Created At</th>
-                            <th className="p-2">Updated At</th>
+                            {/* <th className="p-2">Created At</th>
+                            <th className="p-2">Updated At</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -62,8 +62,8 @@ const TicketStatus = () => {
                                     </td>
                                     <td className="p-2">{new Date(ticket.appointment_date).toLocaleDateString()}</td>
                                     <td className="p-2">{ticket.appointment_time}</td>
-                                    <td className="p-2">{new Date(ticket.created_at).toLocaleString()}</td>
-                                    <td className="p-2">{new Date(ticket.updated_at).toLocaleString()}</td>
+                                    {/* <td className="p-2">{new Date(ticket.created_at).toLocaleString()}</td>
+                                    <td className="p-2">{new Date(ticket.updated_at).toLocaleString()}</td> */}
                                 </tr>
                             ))
                         ) : (

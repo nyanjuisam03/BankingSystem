@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import accountStore from '../../../../store/accountStore';
 import useUserStore from '../../../../store/usersStore';
+import useNotificationStore from '../../../../store/notificationStore';
 
 function VerifyAccountStepTwo({ onBack }) {
   const { account, isLoading: accountLoading, updateAccount, fetchAccountDetail } = accountStore();
   const { getUserDetails, getTellerById, teller, error: storeError } = useUserStore();
+  const { 
+    sendAccountApprovalNotification, 
+    loading, 
+    notificationStatus 
+  } = useNotificationStore();
   const [userDetails, setUserDetails] = useState(null);
   const [tellerDetails, setTellerDetails] = useState(null);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -73,6 +80,7 @@ function VerifyAccountStepTwo({ onBack }) {
         const tellerId = tellerDetails?.id || null;
 
         // Call the `updateAccount` function without forcing `tellerId`
+        await sendAccountApprovalNotification();
         await updateAccount(account.id, 'approved', tellerId);
         console.log(`Account ${account.id} successfully approved`);
 

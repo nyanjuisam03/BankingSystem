@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import useLoanStore from '../../../store/loanStore';
+import useNotificationStore from '../../../store/notificationStore';
 
 function LoanApproval() {
   const [step, setStep] = useState(1);
@@ -14,6 +15,18 @@ function LoanApproval() {
     updateLoanStatus,
     setCurrentLoan 
   } = useLoanStore();
+
+
+  const { 
+    sendLoanApprovalNotification,
+    sendLoanRejectNotification,
+    getApprovedLoans,
+    getRejectedLoans,
+    notificationStatus,
+    approvedLoans,
+    rejectedLoans
+  } = useNotificationStore();
+
 
   useEffect(() => {
     fetchPendingLoans();
@@ -30,6 +43,7 @@ function LoanApproval() {
   const handleStatusUpdate = async (status) => {
     try {
       await updateLoanStatus(currentLoan.id, { status });
+      await sendLoanApprovalNotification();
       setStep(1);
       setCurrentLoan(null);
     } catch (error) {

@@ -34,9 +34,9 @@ const { accounts, isLoading, error, fetchAllAccount } = accountStore();
           >
             <div className="flex justify-between items-center">
               <div>
-                <p className="font-medium">Account #{account.account_number}</p>
+                <p className="font-medium">Account {account.account_number}</p>
                 <p className="text-sm text-gray-600">
-                  Balance: ${parseFloat(account.balance).toFixed(2)}
+                  Balance: Ksh {parseFloat(account.balance).toFixed(2)}
                 </p>
                 <p className="text-sm text-gray-600">
                   Created: {new Date(account.created_at).toLocaleDateString()}

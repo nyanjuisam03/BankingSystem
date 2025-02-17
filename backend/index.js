@@ -9,6 +9,7 @@ const BookingTicketRoutes=require('./src/routes/bookingticket.route')
 const CardRoutes=require('./src/routes/card.routes')
 const ServiceRoute=require('./src/routes/manageTickets.route.')
 const AssetRoute=require('./src/routes/assets.routes')
+const NotificationRoute=require('./src/routes/notifcation.routes')
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/booking', BookingTicketRoutes)
 app.use('/api/card', CardRoutes);
 app.use('/api/management' ,ServiceRoute)
 app.use('/api/assets', AssetRoute)
+app.use('/api/notification',NotificationRoute)
 
 
 
