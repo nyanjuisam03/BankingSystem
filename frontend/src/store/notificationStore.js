@@ -210,7 +210,69 @@ const useNotificationStore = create((set) => ({
     }
   },
 
+// Notify user when incident is assigned
+sendIncidentAssignedNotification: async () => {
+  try {
+    set({ loading: true });
+    const response = await api.post('/notification/notify-assigned');
 
+    set({
+      notificationStatus: response.data,
+      loading: false,
+      error: null,
+    });
+
+    return response.data;
+  } catch (error) {
+    // Handle authentication errors specifically
+    if (error.response?.status === 401) {
+      set({
+        error: 'Authentication token expired or invalid. Please log in again.',
+        loading: false,
+        notificationStatus: null,
+      });
+    } else {
+      set({
+        error: error.response?.data?.message || 'Failed to send notification',
+        loading: false,
+        notificationStatus: null,
+      });
+    }
+    throw error;
+  }
+},
+
+// Notify user when incident is completed
+sendIncidentCompletedNotification: async () => {
+  try {
+    set({ loading: true });
+    const response = await api.post('/notification/notify-completed');
+
+    set({
+      notificationStatus: response.data,
+      loading: false,
+      error: null,
+    });
+
+    return response.data;
+  } catch (error) {
+    // Handle authentication errors specifically
+    if (error.response?.status === 401) {
+      set({
+        error: 'Authentication token expired or invalid. Please log in again.',
+        loading: false,
+        notificationStatus: null,
+      });
+    } else {
+      set({
+        error: error.response?.data?.message || 'Failed to send notification',
+        loading: false,
+        notificationStatus: null,
+      });
+    }
+    throw error;
+  }
+},
   // Clear notification status
   clearNotificationStatus: () => {
     set({ notificationStatus: null });

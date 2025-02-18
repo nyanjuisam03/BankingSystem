@@ -4,11 +4,13 @@ import { ResolveIncident } from '../../../steps/ResolveIncident';
 import useServiceTicket from '../../../store/serviceTicketStore'
 import { SelectIncident } from '../../../steps/SelectIncident';
 import { TECHNICIANS } from '../../../constant/technicians';
+import useNotificationStore from '../../../store/notificationStore';
 
 
 function AssignIcidents() {
 
   const { tickets, isLoading, error, fetchAllTickets, updateTicketStatus } = useServiceTicket();
+  const { sendIncidentAssignedNotification, sendIncidentCompletedNotification, loading,  notificationStatus } = useNotificationStore();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedTicket, setSelectedTicket] = useState(null);
 
@@ -28,6 +30,7 @@ function AssignIcidents() {
         'in_progress', 
         TECHNICIANS[0].name
       );
+      await sendIncidentAssignedNotification()
       if (result.success) setCurrentStep(2);
     }
   };
@@ -38,6 +41,7 @@ function AssignIcidents() {
         selectedTicket.ticket_id, 
         'resolved'
       );
+      await sendIncidentCompletedNotification()
       if (result.success) {
         setCurrentStep(0);
         setSelectedTicket(null);
