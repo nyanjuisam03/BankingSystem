@@ -50,7 +50,7 @@ const AddConsumable = () => {
           { label: "Reorder Level", name: "reorder_level", type: "number" },
           { label: "Supplier Name", name: "supplier_name", type: "text" },
           { label: "Supplier Contact", name: "supplier_contact", type: "email" },
-          { label: "Purchase Price ($)", name: "purchase_price", type: "number" },
+          { label: "Purchase Price (Ksh)", name: "purchase_price", type: "number" },
           { label: "Last Restocked Date", name: "last_restocked", type: "date" },
         ].map((field, index) => (
           <div key={index} className="mb-4">

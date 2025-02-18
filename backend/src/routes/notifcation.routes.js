@@ -15,5 +15,7 @@ router.post('/tickets-confirmed',authenticateToken,notificationController.sendTi
 router.post('/approved-loans',authenticateToken,notificationController.sendLoanApprovalNotification)
 router.post('/rejected-loans',authenticateToken,notificationController.sendLoanRejectNotification)
 router.post('/approved-accounts',authenticateToken,notificationController.sendAccountApprovalNotification)
+router.post('/notify-assigned', notificationController.sendIncidentAssignedNotification);
+router.post('/notify-completed', notificationController.sendIncidentCompletedNotification);
 
 module.exports = router;

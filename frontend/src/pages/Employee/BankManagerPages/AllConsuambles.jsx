@@ -131,7 +131,7 @@ const AllConsumables = () => {
                         className="flex items-center gap-2 border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white disabled:bg-gray-400"
                     >
                         <BsPlusCircle size={20} />
-                        <span>Add New Assets</span>
+                        <span>Add New Consumable</span>
                     </button>
                 </div>
 

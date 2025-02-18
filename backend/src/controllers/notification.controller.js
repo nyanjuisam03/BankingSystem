@@ -446,7 +446,157 @@ const transporter = nodemailer.createTransport({
     });
   },
 
+ // Notify user when an incident is assigned
+ sendIncidentAssignedNotification: (req, res) => {
+  const query = `
+    SELECT mt.*, u.email 
+    FROM management_tickets mt
+    JOIN users u ON mt.created_by = u.id
+    WHERE mt.ticket_type = 'incident' AND mt.status = 'in_progress'
+  `;
 
+  db.query(query, (err, incidents) => {
+    if (err) {
+      console.error('Error fetching incidents:', err);
+      return res.status(500).json({ status: 'error', message: 'Failed to fetch incidents', error: err.message });
+    }
+
+    if (incidents.length === 0) {
+      return res.json({ status: 'success', message: 'No incidents assigned yet', data: [] });
+    }
+
+    const notifications = incidents.map(incident => {
+      const emailContent = {
+        from: '"Incident Management System" <your-email@gmail.com>',
+        to: incident.email,
+        subject: 'Your Incident Has Been Assigned',
+        html: `
+          <h2>Your Incident Has Been Assigned</h2>
+          <p>Dear User,</p>
+          <p>Your incident with Ticket ID: ${incident.id} has been assigned to a technician.</p>
+          <p>Details:</p>
+          <ul>
+            <li>Incident Type: ${incident.ticket_type}</li>
+            <li>Status: Assigned</li>
+          </ul>
+          <p>Our team is working to resolve the issue as soon as possible.</p>
+          <p>Best regards,</p>
+          <p>Incident Management Team</p>
+        `
+      };
+
+      return transporter.sendMail(emailContent);
+    });
+
+    Promise.allSettled(notifications)
+      .then(results => {
+        const successful = results.filter(r => r.status === 'fulfilled').length;
+        const failed = results.filter(r => r.status === 'rejected').length;
+        res.json({ status: 'success', message: 'Notifications sent', data: { successful, failed } });
+      });
+  });
+},
+
+sendRequistionAssignedNotification: (req, res) => {
+  const query = `
+    SELECT mt.*, u.email 
+    FROM management_tickets mt
+    JOIN users u ON mt.created_by = u.id
+    WHERE mt.ticket_type = 'requisition' AND mt.status = 'in_progress'
+  `;
+
+  db.query(query, (err, incidents) => {
+    if (err) {
+      console.error('Error fetching requisition:', err);
+      return res.status(500).json({ status: 'error', message: 'Failed to fetch incidents', error: err.message });
+    }
+
+    if (incidents.length === 0) {
+      return res.json({ status: 'success', message: 'No requisition assigned yet', data: [] });
+    }
+
+    const notifications = incidents.map(incident => {
+      const emailContent = {
+        from: '"Incident Management System" <your-email@gmail.com>',
+        to: incident.email,
+        subject: 'Your Requistion Has Been Assigned',
+        html: `
+          <h2>Your Requistion Has Been Assigned</h2>
+          <p>Dear User,</p>
+          <p>Your Requistion with Ticket ID: ${incident.id} has been assigned to a technician.</p>
+          <p>Details:</p>
+          <ul>
+            <li>Incident Type: ${incident.ticket_type}</li>
+            <li>Status: Assigned</li>
+          </ul>
+          <p>Our team is working to resolve the issue as soon as possible.</p>
+          <p>Best regards,</p>
+          <p>Incident Management Team</p>
+        `
+      };
+
+      return transporter.sendMail(emailContent);
+    });
+
+    Promise.allSettled(notifications)
+      .then(results => {
+        const successful = results.filter(r => r.status === 'fulfilled').length;
+        const failed = results.filter(r => r.status === 'rejected').length;
+        res.json({ status: 'success', message: 'Notifications sent', data: { successful, failed } });
+      });
+  });
+},
+
+// Notify user when an incident is completed
+sendIncidentCompletedNotification: (req, res) => {
+  const query = `
+    SELECT mt.*, u.email 
+    FROM management_tickets mt
+    JOIN users u ON mt.created_by = u.id
+    WHERE mt.ticket_type = 'incident' AND mt.status = 'completed'
+  `;
+
+  db.query(query, (err, incidents) => {
+    if (err) {
+      console.error('Error fetching incidents:', err);
+      return res.status(500).json({ status: 'error', message: 'Failed to fetch incidents', error: err.message });
+    }
+
+    if (incidents.length === 0) {
+      return res.json({ status: 'success', message: 'No incidents completed yet', data: [] });
+    }
+
+    const notifications = incidents.map(incident => {
+      const emailContent = {
+        from: '"Incident Management System" <your-email@gmail.com>',
+        to: incident.email,
+        subject: 'Your Incident Has Been Resolved',
+        html: `
+          <h2>Your Incident Has Been Resolved</h2>
+          <p>Dear User,</p>
+          <p>Your incident with Ticket ID: ${incident.id} has been successfully resolved.</p>
+          <p>Details:</p>
+          <ul>
+            <li>Incident Type: ${incident.ticket_type}</li>
+            <li>Status: Resolved</li>
+          </ul>
+          <p>Thank you for your patience. If you have further issues, please contact support.</p>
+          <p>Best regards,</p>
+          <p>Incident Management Team</p>
+        `
+      };
+
+      return transporter.sendMail(emailContent);
+    });
+
+    Promise.allSettled(notifications)
+      .then(results => {
+        const successful = results.filter(r => r.status === 'fulfilled').length;
+        const failed = results.filter(r => r.status === 'rejected').length;
+        res.json({ status: 'success', message: 'Notifications sent', data: { successful, failed } });
+      });
+  });
+},
 
 
     // Test email configuration
