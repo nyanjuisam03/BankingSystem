@@ -5,14 +5,14 @@ import { BiTransfer, BiHistory } from 'react-icons/bi';
 import { BsBank2 } from 'react-icons/bs';
 import { AiOutlineFileText } from 'react-icons/ai';
 import { LuTickets } from "react-icons/lu";
+import { IoMdClose } from "react-icons/io";
 import useUserStore from '../../store/usersStore';
 
-function Customersidebar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+function Customersidebar({ isOpen, onClose }) {
   const [openSubmenus, setOpenSubmenus] = useState({});
   const sidebarRef = useRef(null);
   const user = useUserStore((state) => state.user);
-    const userId = user?.id || "unauthorized"
+  const userId = user?.id || "unauthorized";
 
   const toggleSubmenu = (index) => {
     setOpenSubmenus((prev) => ({
@@ -21,22 +21,11 @@ function Customersidebar() {
     }));
   };
 
-  const handleOutsideClick = (event) => {
-    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-      setIsSidebarOpen(false);
+  const handleLinkClick = () => {
+    if (window.innerWidth < 1024) {
+      onClose();
     }
   };
-
-  const handleSidebarClick = () => {
-    setIsSidebarOpen(true);
-  };
-
-  useEffect(() => {
-    document.addEventListener('click', handleOutsideClick);
-    return () => {
-      document.removeEventListener('click', handleOutsideClick);
-    };
-  }, []);
 
   const menuItems = [
     {
@@ -73,11 +62,11 @@ function Customersidebar() {
       icon: <RiDashboardLine size={20} />,
       path: '/loans',
       submenu: [
-        {
-          title: 'Apply for Loan',
-          path: '/customer/loan/application',
-          permission: 'apply_for_loan',
-        },
+        // {
+        //   title: 'Apply for Loan',
+        //   path: '/customer/loan/application',
+        //   permission: 'apply_for_loan',
+        // },
         {
           title: 'Loan Status',
           path: '/customer/loan/status',
@@ -109,66 +98,83 @@ function Customersidebar() {
   ];
 
   return (
+    <>
+    {/* Overlay for mobile */}
+    {isOpen && (
+      <div 
+        className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+        onClick={onClose}
+      />
+    )}
+
+    {/* Sidebar */}
     <div
       ref={sidebarRef}
-      onClick={handleSidebarClick}
-      className={`h-screen bg-gray-800 text-white p-4 transition-width duration-300 ${
-        isSidebarOpen ? 'w-64' : 'w-16'
-      }`}
+      className={`fixed lg:static h-screen bg-gray-800 text-white transition-all duration-300 z-50
+        ${isOpen ? 'w-80 left-0' : '-left-64'} 
+        lg:w-64 lg:block`}
     >
-      <div className="mb-8">
-        <h2 className={`text-xl font-bold ${!isSidebarOpen && 'hidden'}`}>
-          Online Banking
-        </h2>
-      </div>
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-xl font-bold">Online Banking</h2>
+          {/* Close button for mobile */}
+          <button 
+            onClick={onClose}
+            className="lg:hidden text-white hover:text-gray-300"
+          >
+            <IoMdClose size={24} />
+          </button>
+        </div>
 
-      <nav>
-        <ul className="space-y-2">
-          {menuItems.map((item, index) => (
-            <li key={index}>
-              {!item.submenu ? (
-                <Link
-                  to={item.path}
-                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-all"
-                >
-                  {item.icon}
-                  {isSidebarOpen && <span>{item.title}</span>}
-                </Link>
-              ) : (
-                <div>
-                  <div
-                    onClick={() => toggleSubmenu(index)}
-                    className="flex items-center justify-between space-x-3 p-2 rounded-lg cursor-pointer hover:bg-gray-700 transition-all"
+        <nav className="mt-6">
+          <ul className="space-y-2">
+            {menuItems.map((item, index) => (
+              <li key={index}>
+                {!item.submenu ? (
+                  <Link
+                    to={item.path}
+                    onClick={handleLinkClick}
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-all"
                   >
-                    <div className="flex items-center space-x-3">
-                      {item.icon}
-                      {isSidebarOpen && <span>{item.title}</span>}
-                    </div>
-                    {isSidebarOpen && (
+                    {item.icon}
+                    <span>{item.title}</span>
+                  </Link>
+                ) : (
+                  <div>
+                    <div
+                      onClick={() => toggleSubmenu(index)}
+                      className="flex items-center justify-between p-3 rounded-lg cursor-pointer hover:bg-gray-700 transition-all"
+                    >
+                      <div className="flex items-center space-x-3">
+                        {item.icon}
+                        <span>{item.title}</span>
+                      </div>
                       <span>{openSubmenus[index] ? '-' : '+'}</span>
+                    </div>
+                    {openSubmenus[index] && (
+                      <ul className="pl-8 space-y-2 mt-2">
+                        {item.submenu.map((subItem, subIndex) => (
+                          <li key={subIndex}>
+                            <Link
+                              to={subItem.path}
+                              onClick={handleLinkClick}
+                              className="flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all text-sm"
+                            >
+                              {subItem.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
                     )}
                   </div>
-                  {openSubmenus[index] && isSidebarOpen && (
-                    <ul className="pl-8 space-y-2">
-                      {item.submenu.map((subItem, subIndex) => (
-                        <li key={subIndex}>
-                          <Link
-                            to={subItem.path}
-                            className="flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all text-sm"
-                          >
-                            {subItem.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     </div>
+  </>
   );
 }
 

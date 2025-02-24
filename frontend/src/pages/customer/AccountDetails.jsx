@@ -5,6 +5,7 @@ import useTransactionStore from '../../store/useTransactionStore';
 import { useNavigate } from 'react-router-dom';
 import AccountTransactionsTable from '../../components/Tables/AccountTransactionsTable';
 
+
 function AccountDetails() {
     const { accountId } = useParams(); 
     const { fetchAccountDetail, account, isLoading, error } = accountStore();
@@ -120,10 +121,10 @@ function AccountDetails() {
                                 <tr>
                                     <th className="border px-4 py-2">Account Number</th>
                                     <th className="border px-4 py-2">Account Type</th>
-                                    <th className="border px-4 py-2">Balance</th>
+                                    <th className="border px-4 py-2">Balance (Ksh)</th>
                                     <th className="border px-4 py-2">Status</th>
                                     <th className="border px-4 py-2">Initial Deposit</th>
-                                    <th className="border px-4 py-2">Created At</th>
+                                    {/* <th className="border px-4 py-2">Created At</th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -133,7 +134,7 @@ function AccountDetails() {
                                     <td className="border px-4 py-2">{account.balance}</td>
                                     <td className="border px-4 py-2">{account.status}</td>
                                     <td className="border px-4 py-2">{account.intial_deposit}</td>
-                                    <td className="border px-4 py-2">{new Date(account.created_at).toLocaleString()}</td>
+                                    {/* <td className="border px-4 py-2">{new Date(account.created_at).toLocaleString()}</td> */}
                                 </tr>
                             </tbody>
                         </table>
@@ -154,6 +155,13 @@ function AccountDetails() {
                         >
                             Withdraw
                         </button>
+                        <button
+        onClick={() => navigate(`/customer/loan/application/${account.account_number}`)}
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        disabled={account.status !== 'approved'}
+    >
+        Apply for Loan
+    </button>
                     </div>
 
 <div>

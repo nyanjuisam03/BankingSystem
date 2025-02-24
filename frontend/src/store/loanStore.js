@@ -53,8 +53,10 @@ const useLoanStore = create((set, get) => ({
         'purpose',
         'term_months',
         'monthly_income',
-        'employment_status'
+        'employment_status',
+         'account_number'
       ];
+
 
       const missingFields = requiredFields.filter(field => !loanData[field]);
       if (missingFields.length > 0) {
@@ -69,7 +71,8 @@ const useLoanStore = create((set, get) => ({
         job_title: loanData.job_title || null,
         years_employed: loanData.years_employed || null,
         credit_score: loanData.credit_score || null,
-        existing_loans_monthly_payment: loanData.existing_loans_monthly_payment || 0
+        existing_loans_monthly_payment: loanData.existing_loans_monthly_payment || 0,
+        account_number: loanData.account_number || null
       };
 
       const response = await api.post('/loans/loans/create-loan', preparedLoanData);

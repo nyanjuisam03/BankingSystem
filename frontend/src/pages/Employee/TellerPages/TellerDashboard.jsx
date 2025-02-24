@@ -6,6 +6,9 @@ import { generateTicketData, generateTellerWeeklyTickets } from '../../../../uti
 function TellerDashboard() {
   const barChartRef = useRef(null);
   const lineChartRef = useRef(null);
+  // Refs to store chart instances
+  const barChartInstance = useRef(null);
+  const lineChartInstance = useRef(null);
 
   const ticketData = generateTicketData();
   const { dates: tellerDates, tellerTickets } = generateTellerWeeklyTickets();
@@ -34,16 +37,35 @@ function TellerDashboard() {
   };
 
   useEffect(() => {
+    // Check if chart instances exist and destroy them before creating new ones
+    if (barChartInstance.current) {
+      barChartInstance.current.destroy();
+    }
+    if (lineChartInstance.current) {
+      lineChartInstance.current.destroy();
+    }
+
+    // Create new chart instances
     if (barChartRef.current) {
-      const barChart = new ApexCharts(barChartRef.current, barChartOptions);
-      barChart.render();
+      barChartInstance.current = new ApexCharts(barChartRef.current, barChartOptions);
+      barChartInstance.current.render();
     }
 
     if (lineChartRef.current) {
-      const lineChart = new ApexCharts(lineChartRef.current, lineChartOptions);
-      lineChart.render();
+      lineChartInstance.current = new ApexCharts(lineChartRef.current, lineChartOptions);
+      lineChartInstance.current.render();
     }
-  }, []);
+
+    // Cleanup function to destroy charts when component unmounts
+    return () => {
+      if (barChartInstance.current) {
+        barChartInstance.current.destroy();
+      }
+      if (lineChartInstance.current) {
+        lineChartInstance.current.destroy();
+      }
+    };
+  }, []); // Empty dependency array since we only want to create charts once
 
   return (
     <div className="p-6">

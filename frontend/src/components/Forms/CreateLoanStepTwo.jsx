@@ -1,10 +1,11 @@
-import React from 'react'
+import React ,{useEffect}from 'react'
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import useLoanStore from '../../store/loanStore';
 import useUserStore from '../../store/usersStore';
+import { useParams } from 'react-router-dom';
 
 const loanSchema = z.object({
     loan_type: z.string().nonempty('Loan type is required'),
@@ -37,7 +38,8 @@ const loanSchema = z.object({
     existing_loans_monthly_payment: z
       .number({ invalid_type_error: 'Monthly payment must be a number' })
       .min(0, 'Payment cannot be negative')
-      .nullable()
+      .nullable(),
+      account_number: z.string().nonempty('Account number is required')
   });
 
  
@@ -48,11 +50,13 @@ function CreateLoanStepTwo({ onBack }) {
     const error = useLoanStore((state) => state.error);
     const successMessage = useLoanStore((state) => state.successMessage);
     const user = useUserStore((state) => state.user);
+    const { accountNumber } = useParams()
   
     const {
       register,
       handleSubmit,
       watch,
+      setValue,
       formState: { errors },
     } = useForm({
       resolver: zodResolver(loanSchema),
@@ -61,16 +65,24 @@ function CreateLoanStepTwo({ onBack }) {
         amount: 1000,
         purpose: '',
         term_months: 12,
-        monthly_income: 1000,
+        monthly_income: 0,
         employment_status: '',
         employer_name: null,
         job_title: null,
         years_employed: null,
         credit_score: null,
-        existing_loans_monthly_payment: 0
+        existing_loans_monthly_payment: 0,
+        account_number:accountNumber || ''
       }
     });
   
+    useEffect(() => {
+      if (accountNumber) {
+        setValue('account_number', accountNumber);
+      }
+    }, [accountNumber, setValue]);
+  
+
     React.useEffect(() => {
       // Check authentication
       if (!user || !user.id) {
@@ -139,20 +151,25 @@ function CreateLoanStepTwo({ onBack }) {
         </div>
 
         <div>
-          <label htmlFor="amount" className="block font-medium text-gray-700">
-            Loan Amount*
-          </label>
-          <input
-            type="number"
-            id="amount"
-            {...register('amount', { valueAsNumber: true })}
-            className="w-full border rounded-md p-2"
-          />
-          {errors.amount && (
-            <p className="text-red-500 text-sm mt-1">{errors.amount.message}</p>
-          )}
-        </div>
-  </div>
+        <label htmlFor="accountNumber" className="block font-medium text-gray-700">
+          Account Number*
+        </label>
+        <input
+          type="text"
+          id="accountNumber"
+          {...register('account_number')}
+          readOnly
+          className="w-full border rounded-md p-2 bg-gray-100 cursor-not-allowed"
+        />
+        {errors.account_number && (
+          <p className="text-red-500 text-sm mt-1">{errors.account_number.message}</p>
+        )}
+      </div>
+
+      
+       </div>
+
+
         <div>
           <label htmlFor="purpose" className="block font-medium text-gray-700">
             Purpose*
@@ -168,7 +185,7 @@ function CreateLoanStepTwo({ onBack }) {
           )}
         </div>
 
-<div>
+      <div>
 
 
         <div>

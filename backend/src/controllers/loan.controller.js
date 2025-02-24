@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 exports.createLoan = (req, res) => {
     const {
         user_id, // Moved from headers to body
+        account_number, 
         loan_type,
         amount,
         purpose,
@@ -18,8 +19,8 @@ exports.createLoan = (req, res) => {
         existing_loans_monthly_payment
     } = req.body;
 
-    // Validate required fields including user_id
-    if (!user_id || !loan_type || !amount || !purpose || !term_months || !monthly_income || !employment_status) {
+    // Validate required fields including user_id and account_number
+    if (!user_id || !account_number || !loan_type || !amount || !purpose || !term_months || !monthly_income || !employment_status) {
         return res.status(400).json({
             message: 'Required fields are missing'
         });
@@ -50,61 +51,79 @@ exports.createLoan = (req, res) => {
                 });
             }
 
-            const loanId = uuidv4();
-            const statusHistoryId = uuidv4();
+            // Check if the account exists and belongs to the user
+            const checkAccountQuery = 'SELECT account_number FROM accounts WHERE account_number = ? AND user_id = ?';
+            db.query(checkAccountQuery, [account_number, user_id], (accErr, accResults) => {
+                if (accErr) {
+                    return res.status(500).json({
+                        message: 'Error checking account',
+                        error: accErr
+                    });
+                }
 
-            // Create loan application
-            const createLoanQuery = `
-                INSERT INTO loan_applications (
-                    id, user_id, loan_type, amount, purpose, term_months,
+                if (accResults.length === 0) {
+                    return res.status(400).json({
+                        message: 'Invalid account number or does not belong to the user'
+                    });
+                }
+
+                const loanId = uuidv4();
+                const statusHistoryId = uuidv4();
+
+                // Create loan application
+                const createLoanQuery = `
+                    INSERT INTO loan_applications (
+                        id, user_id, account_number, loan_type, amount, purpose, term_months,
+                        monthly_income, employment_status, employer_name,
+                        job_title, years_employed, credit_score,
+                        existing_loans_monthly_payment, status
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+                `;
+
+                db.query(createLoanQuery,
+                    [loanId, user_id, account_number, loan_type, amount, purpose, term_months,
                     monthly_income, employment_status, employer_name,
                     job_title, years_employed, credit_score,
-                    existing_loans_monthly_payment, status
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft')
-            `;
-
-            db.query(createLoanQuery,
-                [loanId, user_id, loan_type, amount, purpose, term_months,
-                monthly_income, employment_status, employer_name,
-                job_title, years_employed, credit_score,
-                existing_loans_monthly_payment],
-                (createErr, result) => {
-                    if (createErr) {
-                        return res.status(500).json({
-                            message: 'Error creating loan application',
-                            error: createErr
-                        });
-                    }
-
-                    // Create initial status history
-                    const createHistoryQuery = `
-                        INSERT INTO loan_status_history (
-                            id, loan_application_id, status, changed_by
-                        ) VALUES (?, ?, 'draft', ?)
-                    `;
-
-                    db.query(createHistoryQuery, [statusHistoryId, loanId, user_id], (historyErr) => {
-                        if (historyErr) {
+                    existing_loans_monthly_payment],
+                    (createErr, result) => {
+                        if (createErr) {
                             return res.status(500).json({
-                                message: 'Error creating status history',
-                                error: historyErr
+                                message: 'Error creating loan application',
+                                error: createErr
                             });
                         }
 
-                        res.status(201).json({
-                            message: 'Loan application created successfully',
-                            loanId: loanId,
-                            details: {
-                                id: loanId,
-                                user_id,
-                                loan_type,
-                                amount,
-                                status: 'draft'
+                        // Create initial status history
+                        const createHistoryQuery = `
+                            INSERT INTO loan_status_history (
+                                id, loan_application_id, status, changed_by
+                            ) VALUES (?, ?, 'draft', ?)
+                        `;
+
+                        db.query(createHistoryQuery, [statusHistoryId, loanId, user_id], (historyErr) => {
+                            if (historyErr) {
+                                return res.status(500).json({
+                                    message: 'Error creating status history',
+                                    error: historyErr
+                                });
                             }
+
+                            res.status(201).json({
+                                message: 'Loan application created successfully',
+                                loanId: loanId,
+                                details: {
+                                    id: loanId,
+                                    user_id,
+                                    account_number, // Include account number in response
+                                    loan_type,
+                                    amount,
+                                    status: 'draft'
+                                }
+                            });
                         });
-                    });
-                }
-            );
+                    }
+                );
+            });
         });
     } catch (error) {
         res.status(500).json({

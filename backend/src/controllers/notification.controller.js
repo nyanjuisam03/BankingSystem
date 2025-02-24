@@ -311,10 +311,11 @@ const transporter = nodemailer.createTransport({
             <h2>Congratulations, Your Loan is Approved!</h2>
             <p>Dear ${loan.job_title} ,</p>
             <p>We are pleased to inform you that your loan application for a loan of $${loan.amount} has been approved.</p>
+            <p>The money 
             <p>Loan Details:</p>
             <ul>
               <li>Loan Type: ${loan.loan_type}</li>
-              <li>Loan Amount: Ksh${loan.loan_amount}</li>
+              <li>Loan Amount: Ksh ${loan.loan_amount}</li>
               <li>Repayment Start Date: ${loan.repayment_start_date}</li>
               <li>Repayment Due Date: ${loan.repayment_due_date}</li>
               <li>Monthly Installment: $${loan.monthly_installment}</li>

@@ -37,9 +37,10 @@ function LoanStatus() {
 
   const getLoanStatusColor = (status) => {
     const statusColors = {
-      draft: 'bg-yellow-100 text-yellow-800',
+      pending: 'bg-yellow-100 text-yellow-800',
       approved: 'bg-green-100 text-green-800',
       rejected: 'bg-red-100 text-red-800',
+      disbured:'bg-blue-100 text-blue-800',
       default: 'bg-gray-100 text-gray-800'
     };
     return statusColors[status.toLowerCase()] || statusColors.default;
@@ -77,7 +78,7 @@ function LoanStatus() {
       <h1 className="text-2xl font-bold text-gray-900">My Loans</h1>
       <div className="mt-4 sm:mt-0">
         <button
-          onClick={() => navigate('/customer/loan/application')}
+          onClick={() => navigate('/customer/accounts/overview')}
           className="border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white disabled:bg-gray-400"
         >
           Apply for New Loan
@@ -87,7 +88,7 @@ function LoanStatus() {
 
     <div className="mb-6">
       <div className="flex space-x-4">
-        {['all', 'draft', 'approved', 'rejected'].map((filterOption) => (
+        {['all', 'pending', 'approved', 'rejected', 'disbured'].map((filterOption) => (
           <button
             key={filterOption}
             onClick={() => setFilter(filterOption)}

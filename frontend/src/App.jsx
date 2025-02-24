@@ -74,7 +74,7 @@ function App() {
           <Route path='transaction-history' element={<TransactionHistory/>}/>
           <Route path='personal-information' element={<PersonalInfo/>}/>
           <Route path='loan'>
-            <Route path='application' element={<LoanFile/>}/>
+            <Route path='application/:accountNumber' element={<LoanFile/>}/>
             <Route path='status' element={<LoanStatus/>}/>
             <Route path="loan-details/:loanId" element={<LoanDetailsPage />} />
           </Route>
