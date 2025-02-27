@@ -66,7 +66,7 @@ function AccountDetails() {
                 amount: parseFloat(amount),
                 description: description.trim(),
             });
-
+            console.log(result)
             if (result) {
                 resetForm();
                 await fetchAccountDetail(accountId);
@@ -75,6 +75,7 @@ function AccountDetails() {
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Failed to complete transaction.';
             alert(errorMessage);
+           
         }
     };
 

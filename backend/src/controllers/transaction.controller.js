@@ -45,7 +45,7 @@ exports.createTransaction = (req, res) => {
 
     if (type !== 'withdrawal' && type !== 'deposit') {
         return res.status(400).json({
-            message: 'Transaction type must be either withdraw or deposit'
+            message: 'Transaction type must be either withdrawal or deposit'
         });
     }
 
@@ -58,8 +58,14 @@ exports.createTransaction = (req, res) => {
             });
         }
 
-        // First, get current balance and account status
-        const checkAccountQuery = 'SELECT balance, status FROM accounts WHERE id = ?';
+        // Fetch account details (balance, status, type)
+        const checkAccountQuery = `
+            SELECT a.balance, a.status, at.name AS account_type 
+            FROM accounts a 
+            JOIN account_types at ON a.account_type = at.id 
+            WHERE a.id = ?
+        `;
+
         db.query(checkAccountQuery, [account_id], (err, accountResults) => {
             if (err) {
                 return db.rollback(() => {
@@ -78,7 +84,7 @@ exports.createTransaction = (req, res) => {
                 });
             }
 
-            if (accountResults[0].status !== 'active') {
+            if (accountResults[0].status !== 'approved') {
                 return db.rollback(() => {
                     res.status(400).json({
                         message: 'Account is not active'
@@ -86,36 +92,91 @@ exports.createTransaction = (req, res) => {
                 });
             }
 
-            // Convert current balance to number
             const currentBalance = parseFloat(accountResults[0].balance);
-            let newBalance;
+            const accountType = accountResults[0].account_type;
 
-            if (type === 'withdrawal') {
-                if (numericAmount > currentBalance) {
+            // Define transaction limits in KES
+            const transactionLimits = {
+                Savings: { single: 300000, daily: 500000, monthly: 5000000 },
+                Current: { single: 1000000, daily: 2000000, monthly: Infinity },
+                Business: { single: 2500000, daily: 5000000, monthly: Infinity },
+                Student: { single: 100000, daily: 200000, monthly: 1000000 },
+                Premium: { single: 5000000, daily: 10000000, monthly: Infinity },
+                FixedDeposit: { single: 0, daily: 0, monthly: 0 }
+            };
+
+            const limits = transactionLimits[accountType];
+
+            // Ensure withdrawals do not exceed the single transaction limit
+            if (type === 'withdrawal' && numericAmount > limits.single) {
+                return db.rollback(() => {
+                    res.status(400).json({
+                        message: `❌ Withdrawal exceeds single transaction limit of KES ${limits.single.toLocaleString()}`
+                    });
+                });
+            }
+
+            // Check daily and monthly limits
+            const checkTransactionHistoryQuery = `
+                SELECT 
+                    SUM(CASE WHEN date >= CURDATE() THEN amount ELSE 0 END) AS daily_total,
+                    SUM(CASE WHEN date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) THEN amount ELSE 0 END) AS monthly_total
+                FROM transactions 
+                WHERE account_id = ? AND type = ?
+            `;
+
+            db.query(checkTransactionHistoryQuery, [account_id, type], (err, historyResults) => {
+                if (err) {
                     return db.rollback(() => {
-                        res.status(400).json({
-                            message: 'Insufficient funds'
+                        res.status(500).json({
+                            message: 'Error checking transaction history',
+                            error: err
                         });
                     });
                 }
-                newBalance = currentBalance - numericAmount;
-            } else {
-                newBalance = currentBalance + numericAmount;
-            }
 
-            // Round to 2 decimal places to avoid floating point issues
-            newBalance = Math.round(newBalance * 100) / 100;
+                const dailyTotal = parseFloat(historyResults[0].daily_total || 0);
+                const monthlyTotal = parseFloat(historyResults[0].monthly_total || 0);
 
-            // Create transaction record
-            const createTransactionQuery = `
-                INSERT INTO transactions 
-                (account_id, type, amount, description, date) 
-                VALUES (?, ?, ?, ?, NOW())
-            `;
+                if (type === 'withdrawal') {
+                    if (dailyTotal + numericAmount > limits.daily) {
+                        return db.rollback(() => {
+                            res.status(400).json({
+                                message: `❌ Daily withdrawal limit of KES ${limits.daily.toLocaleString()} exceeded`
+                            });
+                        });
+                    }
 
-            db.query(createTransactionQuery, 
-                [account_id, type, numericAmount, description], 
-                (err, transactionResult) => {
+                    if (monthlyTotal + numericAmount > limits.monthly) {
+                        return db.rollback(() => {
+                            res.status(400).json({
+                                message: `❌ Monthly withdrawal limit of KES ${limits.monthly.toLocaleString()} exceeded`
+                            });
+                        });
+                    }
+                }
+
+                let newBalance = type === 'withdrawal' ? currentBalance - numericAmount : currentBalance + numericAmount;
+
+                // Ensure sufficient balance for withdrawals
+                if (type === 'withdrawal' && numericAmount > currentBalance) {
+                    return db.rollback(() => {
+                        res.status(400).json({
+                            message: '❌ Insufficient funds'
+                        });
+                    });
+                }
+
+                // Round to 2 decimal places
+                newBalance = Math.round(newBalance * 100) / 100;
+
+                // Insert transaction record
+                const createTransactionQuery = `
+                    INSERT INTO transactions (account_id, type, amount, description, date) 
+                    VALUES (?, ?, ?, ?, NOW())
+                `;
+
+                db.query(createTransactionQuery, [account_id, type, numericAmount, description], (err, transactionResult) => {
                     if (err) {
                         return db.rollback(() => {
                             res.status(500).json({
@@ -149,7 +210,7 @@ exports.createTransaction = (req, res) => {
                             }
 
                             res.status(201).json({
-                                message: 'Transaction completed successfully',
+                                message: '✅ Transaction completed successfully',
                                 data: {
                                     transaction_id: transactionResult.insertId,
                                     account_id,
@@ -161,8 +222,8 @@ exports.createTransaction = (req, res) => {
                             });
                         });
                     });
-                }
-            );
+                });
+            });
         });
     });
 };
@@ -190,6 +251,51 @@ exports.getAllTransactions = (req, res) => {
 
         res.status(200).json({
             message: 'All transactions retrieved successfully',
+            data: results
+        });
+    });
+};
+
+
+exports.getEveryTransactions = (req, res) => {
+    const query = `
+        SELECT * FROM transaction_details
+        ORDER BY date DESC
+    `;
+
+    db.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                message: "Error retrieving transactions",
+                error: err
+            });
+        }
+
+        res.status(200).json({
+            message: "Transactions retrieved successfully",
+            data: results
+        });
+    });
+};
+
+exports.getTransactionsByAccountType = (req, res) => {
+    const { accountType } = req.params;
+    const query = `
+        SELECT * FROM transaction_details
+        WHERE account_type = ?
+        ORDER BY date DESC
+    `;
+
+    db.query(query, [accountType], (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                message: "Error retrieving transactions",
+                error: err
+            });
+        }
+
+        res.status(200).json({
+            message: "Transactions retrieved successfully",
             data: results
         });
     });
