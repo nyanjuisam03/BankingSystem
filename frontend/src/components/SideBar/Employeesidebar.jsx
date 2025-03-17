@@ -221,6 +221,10 @@ function Employeesidebar({ userRole }) {
                         title: 'Loan Approval',
                         path: '/employee/loan_officer/approval'
                     },
+                    {
+                        title: 'Loan Disburement',
+                        path: '/employee/loan_officer/disburse'
+                    },
                 ],
             },
             customerSupport: {

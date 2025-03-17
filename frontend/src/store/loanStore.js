@@ -342,6 +342,38 @@ fetchApprovedLoansTotal: async () => {
   }
 },
 
+disburseLoan: async (loanData) => {
+  set({ loading: true, error: null, successMessage: null });
+
+  try {
+    // Validate required fields
+    const requiredFields = ['officer_id', 'borrower_id', 'amount', 'account_type'];
+    const missingFields = requiredFields.filter(field => !loanData[field] || (field === 'amount' && loanData[field] <= 0));
+
+    if (missingFields.length > 0) {
+      throw new Error(`Required fields missing or invalid: ${missingFields.join(', ')}`);
+    }
+
+    // Send loan disbursement request
+    const response = await api.post('/loans/disburse', loanData);
+
+    // Update state with new loan data
+    set(state => ({
+      loans: [...state.loans, response.data.details],
+      currentLoan: response.data.details,
+      loading: false,
+      successMessage: response.data.message || 'Loan disbursed successfully',
+      error: null
+    }));
+
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to disburse loan';
+    set({ error: errorMessage, loading: false, successMessage: null });
+    throw new Error(errorMessage);
+  }
+},
+
   // Utility functions
   clearError: () => set({ error: null }),
   clearSuccessMessage: () => set({ successMessage: null }),

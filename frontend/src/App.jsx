@@ -51,6 +51,7 @@ import ConsumableDetails from './pages/Employee/BankManagerPages/ConsuambleDetai
 import AssetDetails from './pages/Employee/BankManagerPages/AssetsDetails'
 import AddAssets from './pages/Employee/BankManagerPages/AddAssets'
 import AddConsumable from './pages/Employee/BankManagerPages/AddCosumables'
+import LoanDibursed from './pages/Employee/LoanOfficerPages/LoanDibursed'
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import "./index.css"
@@ -116,6 +117,7 @@ function App() {
         <Route path='customer-support' element={<LoanTickets/>}/>
         <Route path='requisition' element={<RequistionForm/>}/>
         <Route path='incident' element={<IncidentPage/>}/>
+        <Route path='disburse' element={<LoanDibursed/>}/>
         </Route>
 
 

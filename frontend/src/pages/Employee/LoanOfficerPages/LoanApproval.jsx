@@ -30,6 +30,7 @@ function LoanApproval() {
 
   useEffect(() => {
     fetchPendingLoans();
+    console.log(loans)
   }, [fetchPendingLoans]);
 
   const handleLoanSelect = (loanId) => {

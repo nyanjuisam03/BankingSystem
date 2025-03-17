@@ -535,3 +535,99 @@ exports.getAllLoans = (req, res) => {
         });
     });
 };
+
+
+exports.disburseLoan = (req, res) => {
+    const { officer_id, borrower_id, amount, account_type } = req.body;
+
+    // Validate required fields
+    if (!officer_id || !borrower_id || !amount || amount <= 0 || !account_type) {
+        return res.status(400).json({
+            message: 'Invalid input data'
+        });
+    }
+
+    // Check if both the officer and borrower exist in the users table
+    const checkUsersQuery = `
+        SELECT id FROM users WHERE id IN (?, ?)
+    `;
+
+    db.query(checkUsersQuery, [officer_id, borrower_id], (userErr, userResults) => {
+        if (userErr) {
+            return res.status(500).json({
+                message: 'Error checking users',
+                error: userErr.message
+            });
+        }
+
+        if (userResults.length < 2) {
+            return res.status(400).json({
+                message: 'Officer or borrower not found'
+            });
+        }
+
+        // Step 1: Insert into loan_disbursements table (id is auto-generated)
+        const insertLoanQuery = `
+            INSERT INTO loan_disbursements (officer_id, borrower_id, amount, repayment_status)
+            VALUES (?, ?, ?, 'pending')
+        `;
+
+        db.query(insertLoanQuery, [officer_id, borrower_id, amount], (loanErr, loanResult) => {
+            if (loanErr) {
+                return res.status(500).json({
+                    message: 'Error disbursing loan',
+                    error: loanErr.message
+                });
+            }
+
+            // Step 2: Check if borrower has an account with the specified account type
+            const checkAccountQuery = `
+                SELECT id, balance FROM accounts 
+                WHERE user_id = ? AND account_type = ?
+            `;
+
+            db.query(checkAccountQuery, [borrower_id, account_type], (accErr, accResults) => {
+                if (accErr) {
+                    return res.status(500).json({
+                        message: 'Error checking borrower account',
+                        error: accErr.message
+                    });
+                }
+
+                if (!accResults.length) {
+                    return res.status(400).json({
+                        message: `No account found for user ${borrower_id} with account type ${account_type}`
+                    });
+                }
+
+                // Step 3: Update borrower's balance in the correct account
+                const updateBalanceQuery = `
+                    UPDATE accounts 
+                    SET balance = balance + ? 
+                    WHERE user_id = ? AND account_type = ?
+                `;
+
+                db.query(updateBalanceQuery, [amount, borrower_id, account_type], (balanceErr, balanceResult) => {
+                    if (balanceErr) {
+                        return res.status(500).json({
+                            message: 'Error updating account balance',
+                            error: balanceErr.message
+                        });
+                    }
+
+                    res.status(201).json({
+                        message: 'Loan disbursed successfully',
+                        loanId: loanResult.insertId, // Gets the auto-generated loan ID
+                        details: {
+                            officer_id,
+                            borrower_id,
+                            amount,
+                            account_type,
+                            status: 'pending'
+                        }
+                    });
+                });
+            });
+        });
+    });
+};
