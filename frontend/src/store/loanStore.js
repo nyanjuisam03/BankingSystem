@@ -294,7 +294,7 @@ const useLoanStore = create((set, get) => ({
         
         // Filter only pending loans
         const pendingLoans = response.data.loans.filter(loan => 
-            loan.status === 'draft'
+            loan.status === 'pending'
         );
         
         set({ 
