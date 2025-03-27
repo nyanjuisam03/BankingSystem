@@ -631,3 +631,100 @@ exports.disburseLoan = (req, res) => {
         });
     });
 };
+
+exports.repayLoan = (req, res) => {
+    const { borrower_id, loan_id, amount_paid, payment_method, account_type } = req.body;
+
+    // Validate input data
+    if (!borrower_id || !loan_id || !amount_paid || amount_paid <= 0 || !payment_method || !account_type) {
+        return res.status(400).json({ message: 'Invalid input data' });
+    }
+
+    // Check if loan exists and belongs to borrower
+    const checkLoanQuery = `
+        SELECT id, amount FROM loan_disbursements WHERE id = ? AND borrower_id = ?
+    `;
+
+    db.query(checkLoanQuery, [loan_id, borrower_id], (loanErr, loanResults) => {
+        if (loanErr) {
+            return res.status(500).json({ message: 'Error checking loan', error: loanErr.message });
+        }
+
+        // if (!loanResults.length) {
+        //     return res.status(404).json({ message: 'Loan not found or does not belong to borrower' });
+        // }
+
+        // const loanAmount = loanResults[0].amount;
+
+        // Check borrower's account balance
+        const checkBalanceQuery = `
+            SELECT id, balance FROM accounts WHERE user_id = ? AND account_type = ?
+        `;
+
+        db.query(checkBalanceQuery, [borrower_id, account_type], (accErr, accResults) => {
+            if (accErr) {
+                return res.status(500).json({ message: 'Error checking account', error: accErr.message });
+            }
+
+            if (!accResults.length) {
+                return res.status(400).json({ message: `No ${account_type} account found for borrower` });
+            }
+
+            const accountBalance = accResults[0].balance;
+
+            if (accountBalance < amount_paid) {
+                return res.status(400).json({ message: 'Insufficient funds for repayment' });
+            }
+
+            // Insert repayment record
+            const insertRepaymentQuery = `
+                INSERT INTO loan_repayments (loan_id, user_id, amount_paid, payment_method, remaining_balance)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+
+            const remainingBalance = loanAmount - amount_paid; // Remaining balance after payment
+
+            db.query(insertRepaymentQuery, [loan_id, borrower_id, amount_paid, payment_method, remainingBalance], (repayErr, repayResult) => {
+                if (repayErr) {
+                    return res.status(500).json({ message: 'Error recording repayment', error: repayErr.message });
+                }
+
+                // Deduct payment from borrower's account
+                const updateBalanceQuery = `
+                    UPDATE accounts SET balance = balance - ? WHERE user_id = ? AND account_type = ?
+                `;
+
+                db.query(updateBalanceQuery, [amount_paid, borrower_id, account_type], (balanceErr, balanceResult) => {
+                    if (balanceErr) {
+                        return res.status(500).json({ message: 'Error updating account balance', error: balanceErr.message });
+                    }
+
+                    // If the remaining balance is 0, mark the loan as fully repaid
+                    if (remainingBalance <= 0) {
+                        const updateLoanStatusQuery = `
+                            UPDATE loan_disbursements SET repayment_status = 'completed' WHERE id = ?
+                        `;
+
+                        db.query(updateLoanStatusQuery, [loan_id], (statusErr, statusResult) => {
+                            if (statusErr) {
+                                return res.status(500).json({ message: 'Error updating loan status', error: statusErr.message });
+                            }
+
+                            res.status(200).json({
+                                message: 'Loan fully repaid',
+                                repaymentId: repayResult.insertId,
+                                remainingBalance: 0
+                            });
+                        });
+                    } else {
+                        res.status(200).json({
+                            message: 'Repayment recorded successfully',
+                            repaymentId: repayResult.insertId,
+                            remainingBalance
+                        });
+                    }
+                });
+            });
+        });
+    });
+};

@@ -374,6 +374,41 @@ disburseLoan: async (loanData) => {
   }
 },
 
+repayLoan: async (repaymentData) => {
+  set({ loading: true, error: null, successMessage: null });
+
+  try {
+    const requiredFields = ['borrower_id', 'loan_id', 'amount_paid', 'payment_method', 'account_type'];
+    const missingFields = requiredFields.filter(field => !repaymentData[field] || (field === 'amount_paid' && repaymentData[field] <= 0));
+
+    if (missingFields.length > 0) {
+      throw new Error(`Required fields missing or invalid: ${missingFields.join(', ')}`);
+    }
+
+    const response = await api.post('loans/repay/loans', repaymentData);
+
+    set(state => ({
+      loans: state.loans.map(loan =>
+        loan.id === repaymentData.loan_id
+          ? { ...loan, remaining_balance: response.data.remainingBalance }
+          : loan
+      ),
+      currentLoan: state.currentLoan?.id === repaymentData.loan_id
+        ? { ...state.currentLoan, remaining_balance: response.data.remainingBalance }
+        : state.currentLoan,
+      loading: false,
+      successMessage: response.data.message || 'Repayment recorded successfully',
+      error: null
+    }));
+
+    return response.data;
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || err.message || 'Failed to process repayment';
+    set({ error: errorMessage, loading: false, successMessage: null });
+    throw new Error(errorMessage);
+  }
+},
+
   // Utility functions
   clearError: () => set({ error: null }),
   clearSuccessMessage: () => set({ successMessage: null }),

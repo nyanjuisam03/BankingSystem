@@ -32,6 +32,7 @@ function RequistionForm() {
             ticket_type: 'requisition',
             status: 'open',
             created_by: 3, 
+            priority:'Medium',
             ...data,
         };
 
@@ -92,7 +93,7 @@ function RequistionForm() {
                 {errors.description && <p className="text-red-500">{errors.description.message}</p>}
             </div>
 
-            <div className="mb-3">
+            {/* <div className="mb-3">
                 <label className="block font-medium">Priority</label>
                 <select {...register('priority')} className="w-full border p-2 rounded">
                     <option value="low">Low</option>
@@ -101,7 +102,7 @@ function RequistionForm() {
                     <option value="critical">Critical</option>
                 </select>
                 {errors.priority && <p className="text-red-500">{errors.priority.message}</p>}
-            </div>
+            </div> */}
 
           
 

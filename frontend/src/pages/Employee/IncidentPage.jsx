@@ -32,6 +32,7 @@ function IncidentPage() {
            
             ticket_type: 'incident',
             status: 'open',
+            priority:'Medium',
             created_by: 3, 
             ...data,
         };
@@ -104,7 +105,7 @@ function IncidentPage() {
         </div>
 
 
-        <div className="mb-3">
+        {/* <div className="mb-3">
                 <label className="block font-medium">Priority</label>
                 <select {...register('priority')} className="w-full border p-2 rounded">
                     <option value="low">Low</option>
@@ -113,7 +114,7 @@ function IncidentPage() {
                     <option value="critical">Critical</option>
                 </select>
                 {errors.priority && <p className="text-red-500">{errors.priority.message}</p>}
-            </div>
+            </div> */}
 
        
 
