@@ -4,7 +4,7 @@ import accountStore from '../../store/accountStore';
 import useTransactionStore from '../../store/useTransactionStore';
 import { useNavigate } from 'react-router-dom';
 import AccountTransactionsTable from '../../components/Tables/AccountTransactionsTable';
-
+import { useSnackbar } from 'notistack';
 
 function AccountDetails() {
     const { accountId } = useParams(); 
@@ -19,7 +19,7 @@ function AccountDetails() {
     const [transactionType, setTransactionType] = useState('');
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
-
+    const { enqueueSnackbar } = useSnackbar();
     const [transactionMethod, setTransactionMethod] = useState("");
     const navigate = useNavigate();
 
@@ -70,7 +70,10 @@ function AccountDetails() {
             if (result) {
                 resetForm();
                 await fetchAccountDetail(accountId);
-                alert(`${transactionType === 'deposit' ? 'Deposit' : 'Withdrawal'} successful!`);
+                enqueueSnackbar(`${transactionType === 'deposit' ? 'Deposit' : 'Withdrawal'} successful!`, {
+                    variant: 'success',
+                    autoHideDuration: 3000
+                  });;
             }
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Failed to complete transaction.';

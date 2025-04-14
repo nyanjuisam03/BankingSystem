@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useInventoryStore from '../../../store/assetsStore'
+import { useSnackbar } from 'notistack';
 
 function AddAssets() {
     const { addAsset, isLoading, error } = useInventoryStore();
@@ -15,7 +16,7 @@ function AddAssets() {
     status: "Active",
     warranty_expiry: "",
   });
-
+  const { enqueueSnackbar } = useSnackbar();
   const categories = ["IT Equipment", "Office Equipment", "Furniture", "ATM Machines", "Other"];
   const locations = ["HQ - IT Department", "HQ - Finance", "Branch A", "Branch B", "Warehouse"];
 
@@ -26,6 +27,10 @@ function AddAssets() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addAsset(formData);
+    enqueueSnackbar('Asset added successfully ', {
+      variant: 'success',
+      autoHideDuration: 3000
+    });
     setFormData({
       name: "",
       category: "IT Equipment",

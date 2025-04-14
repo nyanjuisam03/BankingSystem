@@ -65,10 +65,10 @@ function CreateAccountStepTwo({ onBack }) {
       });
   
       try {
-        await openAccount({
-          account_type: parseInt(formData.account_type),
-          intial_deposit: parseFloat(formData.intial_deposit)
-        });
+         await openAccount({
+         account_type: parseInt(formData.account_type),
+           intial_deposit: parseFloat(formData.intial_deposit)
+         });
 
         enqueueSnackbar('Account was created successfully', {
           variant: 'success',

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SnackbarProvider } from 'notistack';
 import Login from './pages/Login'
 import Homepage from './pages/Homepage'
 import SignIn from './pages/SignIn'
@@ -60,6 +61,7 @@ function App() {
 
   return (
     <>
+    <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
     <BrowserRouter>
     <Routes>
       <Route path='/login' element= {<Login/>} />
@@ -154,7 +156,7 @@ function App() {
 
     </Routes>
     </BrowserRouter>
-     
+    </SnackbarProvider>
     </>
   )
 }

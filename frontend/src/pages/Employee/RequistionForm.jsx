@@ -3,11 +3,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import useServiceTicket from '../../store/serviceTicketStore';
+import { useSnackbar } from 'notistack';
 
 const requisitionSchema = z.object({
 
     description: z.string().min(10, 'Description must be at least 10 characters long'),
-    priority: z.enum(['low', 'medium', 'high', 'critical'], { message: 'Invalid priority' }),
+    // priority: z.enum(['low', 'medium', 'high', 'critical'], { message: 'Invalid priority' }),
     request_type: z.string().min(3, 'Request type is required'),
     requested_items: z.string().min(3, 'At least one item is required'),
     
@@ -24,7 +25,7 @@ function RequistionForm() {
     } = useForm({
         resolver: zodResolver(requisitionSchema),
     });
-
+    const { enqueueSnackbar } = useSnackbar();
 
     const onSubmit = async (data) => {
         const ticketData = {
@@ -32,13 +33,16 @@ function RequistionForm() {
             ticket_type: 'requisition',
             status: 'open',
             created_by: 3, 
-            priority:'Medium',
+            priority:'medium',
             ...data,
         };
 
         const response = await createTicket(ticketData);
         if (response.success) {
-            alert('Requisition submitted successfully');
+            enqueueSnackbar('Requistion ticket is submitted ', {
+                variant: 'success',
+                autoHideDuration: 3000
+              });
             reset();
         } else {
             alert(`Error: ${response.error}`);

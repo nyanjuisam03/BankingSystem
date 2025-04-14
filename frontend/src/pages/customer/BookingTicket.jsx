@@ -5,6 +5,7 @@ import useTicketStore from '../../store/BookingTicketStore';
 import useUserStore from "../../store/usersStore";
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
 
 const ticketSchema = z.object({
     ticketType: z.enum(["Registration Account Issues", "Loan Application Issues"], {
@@ -28,7 +29,7 @@ function BookingTicket() {
   const { createTicket, error, clearError, isLoading } = useTicketStore();
   const { user } = useUserStore();
   const [submitError, setSubmitError] = useState("");
-
+  const { enqueueSnackbar } = useSnackbar();
   const {
       register,
       handleSubmit,
@@ -81,7 +82,11 @@ function BookingTicket() {
             setSubmitError("");
             clearError();
             
-            alert('Ticket booked successfully!');
+            enqueueSnackbar('Ticket successfully booked', {
+                variant: 'success',
+                autoHideDuration: 3000
+              });
+              
             reset();
             navigate('/tickets');
             return;

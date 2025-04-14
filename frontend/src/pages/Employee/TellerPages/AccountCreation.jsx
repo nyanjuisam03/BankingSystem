@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import accountStore from '../../../store/accountStore'
 import useUserStore from '../../../store/usersStore'
+import { useSnackbar } from 'notistack';
 
 function AccountCreation() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -8,7 +9,7 @@ function AccountCreation() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState('');
-  
+  const { enqueueSnackbar } = useSnackbar();
   // Account creation states
   const [accountType, setAccountType] = useState('');
   const [intialDeposit, setIntialDeposit] = useState('');
@@ -76,7 +77,7 @@ function AccountCreation() {
     try {
       const status = 'pending';
   
-      const result = await openAccount({
+      await openAccount({
         account_type: parseInt(accountType),
         intial_deposit: parsedDeposit,
         user_id: selectedUser.id,
@@ -95,6 +96,10 @@ function AccountCreation() {
       setNationalId('');
       setPassportPhoto('');
       setKraPin('');
+      enqueueSnackbar('The customer account is created ', {
+        variant: 'success',
+        autoHideDuration: 3000
+      });
     
     } catch (error) {
       console.error('Failed to create account:', error);

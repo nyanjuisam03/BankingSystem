@@ -1,13 +1,19 @@
 import React from 'react'
 import useTicketStore from '../../../../store/BookingTicketStore'
+import { useSnackbar } from 'notistack';
 
 function StepTwoLoanTickets({ ticket,onBack }) {
     const { confirmTicket, completeTicket, isLoading, error } = useTicketStore()
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleStatusUpdate = async (newStatus) => {
       try {
         if (newStatus === 'CONFIRMED') {
           await confirmTicket(ticket.ticket_id) // Use confirmTicket for "CONFIRMED" status
+          enqueueSnackbar('Loan Ticket is approved ', {
+            variant: 'success',
+            autoHideDuration: 3000
+          });
         } else if (newStatus === 'COMPLETED') {
           await completeTicket(ticket.ticket_id) // Use completeTicket for "COMPLETED" status
         } else {

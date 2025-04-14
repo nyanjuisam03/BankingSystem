@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useEmployeeStore from '../../../store/employeeStore';
+import { useSnackbar } from 'notistack';
 
 function ChangeRoles() {
     const { employeeId } = useParams();
@@ -9,7 +10,7 @@ function ChangeRoles() {
     const [selectedRole, setSelectedRole] = useState('');
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-
+    const { enqueueSnackbar } = useSnackbar();
     console.log(employeeId)
     const roles = [
         { id: '1', name: 'Admin' },
@@ -35,7 +36,15 @@ function ChangeRoles() {
         setIsLoading(false);
         if (result.success) {
             navigate('/employee/bank-manager');
+            enqueueSnackbar('Role changed successfully ', {
+                variant: 'success',
+                autoHideDuration: 3000
+              });
         } else {
+            enqueueSnackbar('Error in changing roles ', {
+                variant: 'success',
+                autoHideDuration: 3000
+              });
             setError(result.error);
         }
     };

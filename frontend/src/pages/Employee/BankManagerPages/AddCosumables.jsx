@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useInventoryStore from "../../../store/assetsStore";
+import { useSnackbar } from 'notistack';
 
 const AddConsumable = () => {
   const { addConsumable, isLoading, error } = useInventoryStore();
@@ -17,7 +18,7 @@ const AddConsumable = () => {
 
   const categories = ["Office Supplies", "IT Supplies", "Cleaning Supplies", "Kitchen Supplies", "Other"];
   const units = ["Box", "Pack", "Bottle", "Roll", "Other"];
-
+  const { enqueueSnackbar } = useSnackbar();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -25,6 +26,10 @@ const AddConsumable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addConsumable(formData);
+    enqueueSnackbar('Consumable added successfully ', {
+      variant: 'success',
+      autoHideDuration: 3000
+    });
     setFormData({
       name: "",
       category: "Office Supplies",

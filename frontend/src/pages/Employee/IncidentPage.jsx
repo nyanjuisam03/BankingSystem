@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useServiceTicket from '../../store/serviceTicketStore';
-
+import { useSnackbar } from 'notistack';
 const incidentSchema = z.object({
    
     description: z.string().min(1, 'Description is required'),
     incident_category: z.string().min(1, 'Category is required'),
-    priority: z.enum(['low', 'medium', 'high', 'critical'], { message: 'Invalid priority' }),
+    // priority: z.enum(['low', 'medium', 'high', 'critical'], { message: 'Invalid priority' }),
     // impact_level: z.enum(['low', 'medium', 'high']),
     resolution_notes: z.string().optional(),
 });
@@ -25,21 +25,24 @@ function IncidentPage() {
     } = useForm({
         resolver: zodResolver(incidentSchema),
     });
-
+    const { enqueueSnackbar } = useSnackbar();
 
     const onSubmit = async (data) => {
         const ticketData = {
            
             ticket_type: 'incident',
             status: 'open',
-            priority:'Medium',
+            priority:'medium',
             created_by: 3, 
             ...data,
         };
 
         const response = await createTicket(ticketData);
         if (response.success) {
-            alert('Requisition submitted successfully');
+          enqueueSnackbar('Incident ticket is submitted ', {
+            variant: 'success',
+            autoHideDuration: 3000
+          });
             reset();
         } else {
             alert(`Error: ${response.error}`);

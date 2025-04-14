@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import accountStore from '../../../../store/accountStore';
 import useUserStore from '../../../../store/usersStore';
 import useNotificationStore from '../../../../store/notificationStore';
+import { useSnackbar } from 'notistack';
+
 
 function VerifyAccountStepTwo({ onBack }) {
   const { account, isLoading: accountLoading, updateAccount, fetchAccountDetail } = accountStore();
@@ -15,7 +17,7 @@ function VerifyAccountStepTwo({ onBack }) {
   const [tellerDetails, setTellerDetails] = useState(null);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [error, setError] = useState(null);
-
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -82,6 +84,10 @@ function VerifyAccountStepTwo({ onBack }) {
         // Call the `updateAccount` function without forcing `tellerId`
         await sendAccountApprovalNotification();
         await updateAccount(account.id, 'approved', tellerId);
+        enqueueSnackbar('Account is approved ', {
+          variant: 'success',
+          autoHideDuration: 3000
+        });
         console.log(`Account ${account.id} successfully approved`);
 
         // Refresh account details after update

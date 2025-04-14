@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import useLoanStore from '../../store/loanStore';
 import useUserStore from '../../store/usersStore';
 import { useParams } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 const loanSchema = z.object({
     loan_type: z.string().nonempty('Loan type is required'),
@@ -51,7 +52,8 @@ function CreateLoanStepTwo({ onBack }) {
     const successMessage = useLoanStore((state) => state.successMessage);
     const user = useUserStore((state) => state.user);
     const { accountNumber } = useParams()
-  
+    const { enqueueSnackbar } = useSnackbar();
+    
     const {
       register,
       handleSubmit,
@@ -92,12 +94,20 @@ function CreateLoanStepTwo({ onBack }) {
   
     const onSubmit = async (data) => {
       try {
-        await createLoan(data);
+         await createLoan(data);
         if (!error) {
+          enqueueSnackbar('Loan successfully applied', {
+            variant: 'success',
+            autoHideDuration: 3000
+          });
           navigate('/customer'); // Adjust this to your actual success route
         }
       } catch (err) {
         // Error is handled by the store
+        enqueueSnackbar(err.message || 'Failed to apply for loan', {
+          variant: 'error',
+          autoHideDuration: 4000
+        });
         console.error('Loan application failed:', err);
       }
     };

@@ -71,7 +71,7 @@ function LoanDibursed() {
       <h2 className="text-2xl font-bold">Enter Loan Disbursement Amount</h2>
     </div>
     <p className="text-gray-700">Loan ID: {selectedLoan?.id}</p>
-    <p className="text-gray-700">Borrower ID: {selectedLoan?.user_id}</p>
+    <p className="text-gray-700">Borrower ID: Kate Njoki</p>
     <p className="text-gray-700">Account Type: Savings</p>
     <input 
       type="number" 

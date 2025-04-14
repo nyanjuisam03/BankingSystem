@@ -1,8 +1,7 @@
 import React from 'react'
 import useTicketStore from '../../../../store/BookingTicketStore'
 import useNotificationStore from '../../../../store/notificationStore'
-
-
+import { useSnackbar } from 'notistack';
 
 
 function ChosingTicketsStepTwo({ ticket, onBack }) {
@@ -14,14 +13,23 @@ function ChosingTicketsStepTwo({ ticket, onBack }) {
       notificationStatus,
       confirmedTickets
     } = useNotificationStore();
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleStatusUpdate = async (newStatus) => {
       try {
         if (newStatus === 'CONFIRMED') {
           await sendTicketStatusChangeNotification();
           await confirmTicket(ticket.ticket_id) // Use confirmTicket for "CONFIRMED" status
+          enqueueSnackbar('Ticket is confirmed ', {
+            variant: 'success',
+            autoHideDuration: 3000
+          });
         } else if (newStatus === 'COMPLETED') {
           await completeTicket(ticket.ticket_id) // Use completeTicket for "COMPLETED" status
+          enqueueSnackbar('Ticket is completed ', {
+            variant: 'success',
+            autoHideDuration: 3000
+          });
         } else {
           console.warn('Unsupported status update:', newStatus)
         }
