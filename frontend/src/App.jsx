@@ -122,7 +122,6 @@ function App() {
         <Route path='disburse' element={<LoanDibursed/>}/>
         </Route>
 
-
       <Route path='bank-manager'>
         <Route path='manager-dashboard' element={<ManagerDashboard/>}/>
          <Route path='employees' element={<EmployeeManagement/>}/>

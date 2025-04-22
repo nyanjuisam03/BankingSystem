@@ -14,8 +14,8 @@ function EmployeeHomepage() {
       navigate('/login');
     }
     // Add role-based redirect if needed
-    if (user && !['admin', 'bank_manager', 'teller', 'loan_officer','supplier'].includes(user.role?.toLowerCase())) {
-      navigate('/unauthorized'); // Create this route/page if needed
+    if (user && !['admin', 'bank_manager', 'teller', 'loan_officer', 'supplier'].includes(user.role?.toLowerCase())) {
+      navigate('/unauthorized'); 
     }
   }, [user, navigate]);
 
