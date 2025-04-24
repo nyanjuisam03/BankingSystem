@@ -1,24 +1,28 @@
 import React from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
-import FirstImage from "../../pictures/FirstImage.svg";
-import SecondImage from "../../pictures/SecondImage.svg";
 
 function LoginSlideShow() {
   const slides = [
     {
-      src: FirstImage, 
-      caption: "Securely manage your finances anytime, anywhere with our trusted online banking platform.",
+      src: "/pictures/SlideshowThreeImage.jpg", 
+      caption: "Securely manage your finances anytime, anywhere with our trusted banking platform.",
     },
     {
-      src: SecondImage, 
+      src: "/pictures/SlideshowImageTwo.jpg", 
       caption: "Your financial security is our priority—experience seamless and secure banking today",
     },
   ];
 
   return (
-    <div className="max-w-lg mx-auto h-screen items-center p-10">
-      <h2 className="text-center py-5 font-bold text-xl w-full">Online Bank Management System</h2>
+    <div className="relative w-full h-screen overflow-hidden">
+      {/* Logo on top-left */}
+      <img
+        src="/pictures/FamilyBankLogo.png"
+        alt="Logo"
+        className="absolute  left-5 w-44 h-auto z-10"
+      />
+
       <Splide
         options={{
           type: "fade",
@@ -32,13 +36,16 @@ function LoginSlideShow() {
       >
         {slides.map((slide, index) => (
           <SplideSlide key={index}>
-            <div className="flex flex-col items-center">
-              <img
-                src={slide.src}
-                alt={`Slide ${index + 1}`}
-                className="w-full "
-              />
-              <p className="mt-2 text-center text-gray-700 py-7">{slide.caption}</p>
+            <div className="relative w-full h-screen">
+            <img
+  src={slide.src}
+  alt={`Slide ${index + 1}`}
+  className="w-full h-full object-cover opacity-80"
+/>
+
+              <p className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-center text-white text-lg px-4 py-2 bg-opacity-60 bg-black rounded-lg max-w-xl">
+                {slide.caption}
+              </p>
             </div>
           </SplideSlide>
         ))}

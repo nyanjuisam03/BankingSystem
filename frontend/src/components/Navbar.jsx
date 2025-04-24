@@ -73,7 +73,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-            className="hover:bg-gray-100 rounded-full p-2 focus:outline-none relative"
+            className="hover:bg-blue-100 rounded-full p-2 focus:outline-none relative"
           >
             <IoMdNotificationsOutline className="h-6 w-6 text-gray-600" />
             {/* Notification Badge */}

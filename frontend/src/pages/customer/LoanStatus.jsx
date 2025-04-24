@@ -79,8 +79,8 @@ function LoanStatus() {
       <div className="mt-4 sm:mt-0">
         <button
           onClick={() => navigate('/customer/accounts/overview')}
-          className="border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white disabled:bg-gray-400"
-        >
+          className="border border-blue-700 text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-800 hover:text-white disabled:bg-blue-300"
+          >
           Apply for New Loan
         </button>
       </div>

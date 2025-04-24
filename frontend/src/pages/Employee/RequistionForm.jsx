@@ -133,7 +133,7 @@ function RequistionForm() {
 
             <button
                 type="submit"
-                className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                 disabled={isSubmitting}
             >
                 {isSubmitting ? 'Submitting...' : 'Submit Request'}

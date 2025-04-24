@@ -128,7 +128,7 @@ const AllConsumables = () => {
                 <div className="flex justify-end items-center mb-6">
                     <button
                         onClick={() => navigate('/employee/bank-manager/add-consumable')}
-                        className="flex items-center gap-2 border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white disabled:bg-gray-400"
+                        className="flex items-center gap-2 border border-blue-800 text-blue-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white disabled:bg-gray-400"
                     >
                         <BsPlusCircle size={20} />
                         <span>Add New Consumable</span>
@@ -141,7 +141,7 @@ const AllConsumables = () => {
                 {!isLoading && consumables.length > 0 ? (
                     <>
                         <div className="overflow-x-auto">
-                            <table className="w-full border-collapse border border-gray-300">
+                            <table className="w-full border-collapse border border-blue-300">
                                 <thead>
                                     <tr className="bg-gray-600 text-white">
                                         <th className="p-2">Consumable Name</th>

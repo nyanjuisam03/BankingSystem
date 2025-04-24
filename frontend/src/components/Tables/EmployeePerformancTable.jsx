@@ -13,7 +13,7 @@ function EmployeePerformancTable() {
         },
         {
           id: 2,
-          name: "Sarah Johnson",
+          name: "Jane Smith",
           role: "Teller",
           accountsCompleted: 167,
           ticketsCompleted: 92,
@@ -21,7 +21,7 @@ function EmployeePerformancTable() {
         },
         {
           id: 3,
-          name: "Michael Brown",
+          name: "Bruce Smith",
           role: "Loan Officer",
           accountsCompleted: null,
           ticketsCompleted: 45,

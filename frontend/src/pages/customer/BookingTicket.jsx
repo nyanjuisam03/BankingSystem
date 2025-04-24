@@ -208,11 +208,12 @@ function BookingTicket() {
                     type="submit"
                     disabled={isLoading}
                     className={`w-full py-2 px-4 rounded font-bold 
-                    border border-gray-400 text-gray-400 
+                    border border-blue-600 text-white 
                     ${isLoading 
                         ? 'bg-gray-200 cursor-not-allowed' 
-                        : 'bg-white hover:bg-gray-800 hover:text-white'
+                        : 'bg-blue-600 hover:bg-blue-700 hover:border-blue-700 hover:text-white'
                     }`}
+                  
                 >
                     {isLoading ? 'Booking...' : 'Book Appointment'}
                 </button>

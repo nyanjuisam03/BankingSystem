@@ -51,7 +51,7 @@ function CustomersAccount() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse border border-gray-300">
               <thead>
-                <tr className="bg-gray-600 text-white">
+                <tr className="bg-blue-600 text-white">
                   <th className="p-2">ID</th>
                   
                   <th className="p-2">Account Type</th>

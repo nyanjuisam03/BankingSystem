@@ -47,17 +47,17 @@ const transporter = nodemailer.createTransport({
     
           const notifications = loanApplications.map(loan => {
             const emailContent = {
-              from: '"Loan Management System" <your-gmail@gmail.com>',
+              from: 'Family Bank Managemenent System',
               to: loan.email,
               subject: 'Loan Repayment Reminder',
               html: `
                 <h2>Loan Repayment Reminder</h2>
                 <p>Dear valued customer,</p>
-                <p>This is a reminder that your loan repayment of $${loan.monthly_installment} is due on ${loan.repayment_due_date}.</p>
+                <p>This is a reminder that your loan repayment of Ksh${loan.monthly_installment} is due on ${loan.repayment_due_date}.</p>
                 <p>Loan Details:</p>
                 <ul>
                   <li>Loan Type: ${loan.loan_type}</li>
-                  <li>Monthly Installment: $${loan.monthly_installment}</li>
+                  <li>Monthly Installment: Ksh${loan.monthly_installment}</li>
                   <li>Due Date: ${loan.repayment_due_date}</li>
                   <li>Loan Purpose: ${loan.purpose}</li>
                 </ul>
@@ -135,7 +135,7 @@ const transporter = nodemailer.createTransport({
       
           const notifications = accounts.map((account) => {
             const emailContent = {
-              from: '"Account Management" <your-email@gmail.com>',
+              from: '"Family Bank Management',
               to: account.email,
               subject: 'Account Approval Notification',
               html: `
@@ -227,7 +227,7 @@ const transporter = nodemailer.createTransport({
         to: ticket.email,
         subject: 'Ticket Status Changed to Confirmed',
         html: `
-          <h2>Your Ticket Status Has Changed</h2>
+          <h2>Your Ticket Status at Family Bank Has Changed</h2>
           <p>Dear Customer,</p>
           <p>Your ticket with ID ${ticket.ticket_id} has been confirmed. Please take necessary actions.</p>
           <p>Ticket Details:</p>
@@ -236,7 +236,7 @@ const transporter = nodemailer.createTransport({
             <li>Status: Confirmed</li>
             <li>Subject: ${ticket.description}</li>
           </ul>
-          <p>Thank you for your cooperation.</p>
+          <p>Thank you for your cooperation and choosing Family.</p>
         `
       };
 
@@ -304,7 +304,7 @@ const transporter = nodemailer.createTransport({
   
       const notifications = loanApplications.map(loan => {
         const emailContent = {
-          from: '"Loan Management System" <your-email@gmail.com>',
+          from: '"Family Bank Management System',
           to: loan.email,
           subject: 'Your Loan Application has been Approved',
           html: `
@@ -318,7 +318,7 @@ const transporter = nodemailer.createTransport({
               <li>Loan Amount: Ksh ${loan.loan_amount}</li>
               <li>Repayment Start Date: ${loan.repayment_start_date}</li>
               <li>Repayment Due Date: ${loan.repayment_due_date}</li>
-              <li>Monthly Installment: $${loan.monthly_installment}</li>
+              <li>Monthly Installment: Ksh${loan.monthly_installment}</li>
             </ul>
             <p>Thank you for choosing us for your financial needs. Please make your payments on time to avoid any penalties.</p>
             <p>If you have any questions, feel free to contact us.</p>
@@ -468,7 +468,7 @@ const transporter = nodemailer.createTransport({
 
     const notifications = incidents.map(incident => {
       const emailContent = {
-        from: '"Incident Management System" <your-email@gmail.com>',
+        from: '"Family Bank Management System',
         to: incident.email,
         subject: 'Your Incident Has Been Assigned',
         html: `
@@ -518,7 +518,7 @@ sendRequistionAssignedNotification: (req, res) => {
 
     const notifications = incidents.map(incident => {
       const emailContent = {
-        from: '"Incident Management System" <your-email@gmail.com>',
+        from: 'Family Bank Management System',
         to: incident.email,
         subject: 'Your Requistion Has Been Assigned',
         html: `
@@ -569,7 +569,7 @@ sendIncidentCompletedNotification: (req, res) => {
 
     const notifications = incidents.map(incident => {
       const emailContent = {
-        from: '"Incident Management System" <your-email@gmail.com>',
+        from: 'Family Bank Management Syste,',
         to: incident.email,
         subject: 'Your Incident Has Been Resolved',
         html: `

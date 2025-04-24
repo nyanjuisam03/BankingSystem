@@ -10,7 +10,7 @@ function SignIn() {
     <div className='hidden sm:block w-1/2 h-full'>
     <LoginSlideShow/>
    </div>
-   <div className='w-full sm:w-1/2  bg-gray-50 p-4  shadow  h-full'>
+   <div className='w-full sm:w-1/2 p-4  shadow  h-full'>
     <SignInForm/>
    </div>
    </div>

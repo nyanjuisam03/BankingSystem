@@ -43,7 +43,7 @@ const { accounts, isLoading, error, fetchAllAccount } = accountStore();
                 </p>
               </div>
               <button
-                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-gray-600"
                 onClick={() => handleSelectAccount(account.id)}
               >
                 Verify
@@ -52,7 +52,7 @@ const { accounts, isLoading, error, fetchAllAccount } = accountStore();
           </div>
         ))}
       {accounts.filter((acc) => acc.status === 'pending').length === 0 && (
-        <p className="text-center text-gray-500">No pending accounts to verify</p>
+        <p className="text-center text-blue-500">No pending accounts to verify</p>
       )}
     </div>
   </div>

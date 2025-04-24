@@ -39,7 +39,7 @@ const TicketStatus = () => {
             <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-gray-300">
                     <thead>
-                        <tr className="bg-gray-600 text-white">
+                        <tr className="bg-blue-600 text-white">
                             
                             <th className="p-2">Type</th>
                             <th className="p-2">Description</th>
@@ -51,29 +51,47 @@ const TicketStatus = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {paginatedTickets.length > 0 ? (
-                            paginatedTickets.map((ticket) => (
-                                <tr key={ticket.ticket_id} className="border-b border-gray-200 even:bg-gray-100 text-center">
-                                 
-                                    <td className="p-2">{ticket.ticket_type}</td>
-                                    <td className="p-2">{ticket.description}</td>
-                                    <td className={`p-2 font-semibold ${ticket.status === "CONFIRMED" ? "text-green-600" : "text-red-600"}`}>
-                                        {ticket.status}
-                                    </td>
-                                    <td className="p-2">{new Date(ticket.appointment_date).toLocaleDateString()}</td>
-                                    <td className="p-2">{ticket.appointment_time}</td>
-                                    {/* <td className="p-2">{new Date(ticket.created_at).toLocaleString()}</td>
-                                    <td className="p-2">{new Date(ticket.updated_at).toLocaleString()}</td> */}
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="8" className="text-center py-4 text-gray-500">
-                                    No tickets available
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
+  {paginatedTickets.length > 0 ? (
+    paginatedTickets.map((ticket) => {
+      const today = new Date();
+      const appointmentDate = new Date(ticket.appointment_date);
+      const isExpired =
+        ticket.status === "PENDING" && appointmentDate < today;
+
+      return (
+        <tr
+          key={ticket.ticket_id}
+          className="border-b border-gray-200 even:bg-gray-100 text-center"
+        >
+          <td className="p-2">{ticket.ticket_type}</td>
+          <td className="p-2">{ticket.description}</td>
+          <td
+            className={`p-2 font-semibold ${
+              isExpired
+                ? "text-yellow-600"
+                : ticket.status === "CONFIRMED"
+                ? "text-green-600"
+                : "text-red-600"
+            }`}
+          >
+            {isExpired ? "EXPIRED" : ticket.status}
+          </td>
+          <td className="p-2">
+            {appointmentDate.toLocaleDateString()}
+          </td>
+          <td className="p-2">{ticket.appointment_time}</td>
+        </tr>
+      );
+    })
+  ) : (
+    <tr>
+      <td colSpan="8" className="text-center py-4 text-gray-500">
+        No tickets available
+      </td>
+    </tr>
+  )}
+</tbody>
+
                 </table>
             </div>
 

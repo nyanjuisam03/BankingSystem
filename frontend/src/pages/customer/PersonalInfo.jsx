@@ -98,7 +98,7 @@ return (
 
   <button
     type="submit"
-    className={`w-full border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white ${isSubmitting ? "opacity-50" : ""}`}
+    className={`w-full border border-blue-700 text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-800 transition-colors duration-200 ${isSubmitting ? "opacity-50" : ""}`}
     disabled={isSubmitting}
   >
     {isSubmitting ? "Updating..." : "Save Changes"}

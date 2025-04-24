@@ -111,8 +111,8 @@ function CreateAccountStepOne({ onNext }) {
         <div className="flex justify-end mt-6">
           <button 
             type="submit" 
-            className="w-full md:w-1/5 border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition-colors duration-200"
-          >
+            className="w-full md:w-1/5 border border-blue-700 text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-800 transition-colors duration-200"
+            >
             Next
           </button>
         </div>

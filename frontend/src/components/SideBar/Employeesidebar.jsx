@@ -335,7 +335,11 @@ function Employeesidebar({ userRole }) {
         >
             <div className="mb-8">
                 <h2 className={`text-xl font-bold ${!isSidebarOpen && 'hidden'}`}>
-                    {user?.role ? user.role.replace('_', ' ').replace(/(^\w|\s\w)/g, letter => letter.toUpperCase()) : 'Employee Portal'}
+                <img
+  src="/pictures/FamilyBankLogo.png"
+  alt="Logo"
+  className="w-32 h-auto" // Adjust width as needed
+/>
                 </h2>
             </div>
 
@@ -362,7 +366,7 @@ function Employeesidebar({ userRole }) {
                                         {isSidebarOpen && <span>{item.title}</span>}
                                     </div>
                                     {isSidebarOpen && item.submenu && (
-                                        <span>{openSubmenus[item.title] ? '▼' : '▶'}</span>
+                                        <span>{openSubmenus[item.title]}</span>
                                     )}
                                 </div>
                                 {openSubmenus[item.title] && isSidebarOpen && item.submenu && (

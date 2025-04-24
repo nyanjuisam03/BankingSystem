@@ -148,7 +148,7 @@ function IncidentPage() {
         <div className="mt-6 flex justify-between">
             <button
                 type="submit"
-                className="bg-gray-500 text-white p-2 rounded"
+                className="bg-blue-500 text-white p-2 rounded"
                 disabled={isSubmitting}
             >
                 {isSubmitting ? 'Submitting...' : 'Submit Ticket'}

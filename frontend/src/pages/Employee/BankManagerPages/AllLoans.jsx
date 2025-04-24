@@ -42,12 +42,12 @@ function AllLoans() {
       <h2 className="text-lg font-semibold mb-2">All Loans</h2>
 
       {loans.length === 0 ? (
-        <div className="text-center text-gray-500 py-4">No loans available.</div>
+        <div className="text-center text-blue-500 py-4">No loans available.</div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-gray-300">
             <thead>
-              <tr className="bg-gray-600 text-white">
+              <tr className="bg-blue-600 text-white">
                 <th className="p-2">Loan Type</th>
                 <th className="p-2">Amount</th>
                 <th className="p-2">Purpose</th>

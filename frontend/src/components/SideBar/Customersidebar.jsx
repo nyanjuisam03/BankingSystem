@@ -115,8 +115,12 @@ function Customersidebar({ isOpen, onClose }) {
         lg:w-64 lg:block`}
     >
       <div className="p-4">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xl font-bold">Online Banking</h2>
+        <div className="flex items-center justify-between">
+        <img
+  src="/pictures/FamilyBankLogo.png"
+  alt="Logo"
+  className="w-32 h-auto" // Adjust width as needed
+/>
           {/* Close button for mobile */}
           <button 
             onClick={onClose}

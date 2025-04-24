@@ -123,7 +123,8 @@ function LoginForm() {
         <button 
           type="submit"
           disabled={isLoading}
-          className="border border-gray-800 text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-800 hover:text-white"
+          className="bg-blue-600 text-white border border-blue-600 px-4 py-2 rounded hover:bg-blue-700"
+
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
