@@ -22,6 +22,8 @@ function AccountDetails() {
     const { enqueueSnackbar } = useSnackbar();
     const [transactionMethod, setTransactionMethod] = useState("");
     const navigate = useNavigate();
+    const [pin, setPin] = useState('');
+
 
     // Helper function to convert account type number to string
     const getAccountTypeLabel = (typeNumber) => {
@@ -180,87 +182,100 @@ function AccountDetails() {
 {showModal && (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
         <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <form onSubmit={handleTransactionSubmit}>
-                <h2 className="text-xl font-bold mb-4">
-                    {transactionType === 'deposit' ? 'Deposit Funds' : 'Withdraw Funds'}
-                </h2>
+        <form onSubmit={handleTransactionSubmit}>
+    <h2 className="text-xl font-bold mb-4">
+        {transactionType === 'deposit' ? 'Deposit Funds' : 'Withdraw Funds'}
+    </h2>
 
-                {/* Deposit/Withdraw Method Selection */}
-                <div className="mb-4">
-                    <label className="block text-gray-700">
-                        {transactionType === 'deposit' ? 'Deposit Method' : 'Withdrawal Method'}
-                    </label>
-                    <select
-                        className="w-full border px-3 py-2 rounded"
-                        value={transactionMethod}
-                        onChange={(e) => setTransactionMethod(e.target.value)}
-                        required
-                    >
-                        <option value="" disabled>Select an option</option>
-                        {transactionType === 'deposit' ? (
-                            <>
-                                <option value="bank-transfer">Bank Transfer</option>
-                                <option value="mobile-money">Mobile Money (M-PESA, Airtel Money)</option>
-                                <option value="agent-deposit">Agent Deposit</option>
-                            </>
-                        ) : (
-                            <>
-                                <option value="withdraw-bank">Withdraw to Bank Account</option>
-                                <option value="withdraw-mobile">Withdraw to Mobile Money</option>
-                                <option value="withdraw-agent">Withdraw via Agent</option>
-                            </>
-                        )}
-                    </select>
-                </div>
+    {/* Deposit/Withdraw Method Selection */}
+    <div className="mb-4">
+        <label className="block text-gray-700">
+            {transactionType === 'deposit' ? 'Deposit Method' : 'Withdrawal Method'}
+        </label>
+        <select
+            className="w-full border px-3 py-2 rounded"
+            value={transactionMethod}
+            onChange={(e) => setTransactionMethod(e.target.value)}
+            required
+        >
+            <option value="" disabled>Select an option</option>
+            {transactionType === 'deposit' ? (
+                <>
+                    <option value="bank-transfer">Bank Transfer</option>
+                    <option value="mobile-money">Mobile Money (M-PESA, Airtel Money)</option>
+                    <option value="agent-deposit">Agent Deposit</option>
+                </>
+            ) : (
+                <>
+                    <option value="withdraw-bank">Withdraw to Bank Account</option>
+                    <option value="withdraw-mobile">Withdraw to Mobile Money</option>
+                    <option value="withdraw-agent">Withdraw via Agent</option>
+                </>
+            )}
+        </select>
+    </div>
 
-                {/* Amount Input */}
-                <div className="mb-4">
-                    <label className="block text-gray-700">Amount</label>
-                    <input
-                        type="number"
-                        className="w-full border px-3 py-2 rounded"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        min="0"
-                        step="0.01"
-                        required
-                    />
-                </div>
+    {/* Amount Input */}
+    <div className="mb-4">
+        <label className="block text-gray-700">Amount</label>
+        <input
+            type="number"
+            className="w-full border px-3 py-2 rounded"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            min="0"
+            step="0.01"
+            required
+        />
+    </div>
 
-                {/* Description Input */}
-                <div className="mb-4">
-                    <label className="block text-gray-700">Description</label>
-                    <textarea
-                        className="w-full border px-3 py-2 rounded"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    ></textarea>
-                </div>
+    {/* Description Input */}
+    <div className="mb-4">
+        <label className="block text-gray-700">Description</label>
+        <textarea
+            className="w-full border px-3 py-2 rounded"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+        ></textarea>
+    </div>
 
-                {/* Buttons */}
-                <div className="flex justify-end gap-4">
-                    <button
-                        type="button"
-                        onClick={handleCloseModal}
-                        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        disabled={transactionLoading}
-                    >
-                        {transactionLoading ? 'Processing...' : 'Submit'}
-                    </button>
-                </div>
+    {/* PIN Input */}
+    <div className="mb-4">
+        <label className="block text-gray-700">Enter PIN</label>
+        <input
+            type="password"
+            className="w-full border px-3 py-2 rounded"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            required
+        />
+    </div>
 
-                {/* Error Message */}
-                {transactionError && (
-                    <p className="text-red-500 mt-2">{transactionError}</p>
-                )}
-            </form>
+    {/* Buttons */}
+    <div className="flex justify-end gap-4">
+        <button
+            type="button"
+            onClick={handleCloseModal}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+        >
+            Cancel
+        </button>
+        <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            disabled={transactionLoading}
+        >
+            {transactionLoading ? 'Processing...' : 'Submit'}
+        </button>
+    </div>
+
+    {/* Error Message */}
+    {transactionError && (
+        <p className="text-red-500 mt-2">{transactionError}</p>
+    )}
+</form>
+
         </div>
     </div>
 )}
